@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escape the Filterblase - Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f8ff;
+      padding: 50px;
+    }
+    h1 {
+      color: #333;
+    }
+    .question {
+      font-size: 1.3em;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 25px;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #45a049;
+    }
+    #restartBtn {
+      background-color: #ff4c4c;
+    }
+    #restartBtn:hover {
+      background-color: #e84343;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Escape the Filterblase!</h1>
+  <div id="game">
+    <div class="question" id="question">Lade Frage...</div>
+    <button class="btn" id="btnA">A</button>
+    <button class="btn" id="btnB">B</button>
+    <button class="btn" id="restartBtn" style="display:none;">Neu starten</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    const questions = [
+      { text: "Ein Algorithmus zeigt dir hauptsächlich Inhalte, die du oft likest oder kommentierst. Was ist das Ziel?", options: { A: "Dir möglichst viele verschiedene Meinungen zeigen", B: "Dir Inhalte zeigen, die dich am meisten interessieren" }, answer: "B" },
+      { text: "Warum landen manche Posts nicht in deinem Feed, obwohl Freunde sie geteilt haben?", options: { A: "Der Algorithmus entscheidet, welche Inhalte relevant sind", B: "Dein Internet ist zu langsam" }, answer: "A" },
+      { text: "Wenn du lange ein Video anschaust, wird der Algorithmus:", options: { A: "Dir ähnliche Videos vorschlagen", B: "Dir keine Videos mehr zeigen" }, answer: "A" },
+      { text: "Filterblasen entstehen, weil der Algorithmus:", options: { A: "Nur Inhalte zeigt, die du magst oder die dich bestätigen", B: "Dir zufällige Inhalte aus aller Welt zeigt" }, answer: "A" },
+      { text: "Du siehst nur Posts von einigen Freund*innen. Das liegt daran, dass der Algorithmus:", options: { A: "Posts nach Relevanz und Interaktion sortiert", B: "Alle Posts gleichzeitig anzeigen will" }, answer: "A" },
+      { text: "Wie kannst du verhindern, dass der Algorithmus dich in einer Filterblase hält?", options: { A: "Unterschiedliche Inhalte aktiv suchen und liken", B: "Nur die Inhalte liken, die du sowieso magst" }, answer: "A" },
+      { text: "Der Algorithmus zeigt dir Werbung basierend auf:", options: { A: "Deinen Interessen und Interaktionen", B: "Zufälligen Produkten" }, answer: "A" },
+      { text: "Du willst, dass der Algorithmus dir neue Perspektiven zeigt. Was machst du?", options: { A: "Nur die Inhalte konsumieren, die du sowieso magst", B: "Aktiv Inhalte von anderen Meinungen folgen und entdecken" }, answer: "B" },
+      { text: "Warum kann ein Social-Media-Algorithmus gefährlich sein?", options: { A: "Er kann dich in einer Filterblase halten und deine Sicht auf die Welt verzerren", B: "Er löscht automatisch alle Nachrichten" }, answer: "A" }
+    ];
+
+    let current = 0;
+
+    const questionEl = document.getElementById("question");
+    const btnA = document.getElementById("btnA");
+    const btnB = document.getElementById("btnB");
+    const restartBtn = document.getElementById("restartBtn");
+    const messageEl = document.getElementById("message");
+
+    function loadQuestion() {
+      const q = questions[current];
+      questionEl.textContent = q.text;
+      btnA.textContent = "A: " + q.options.A;
+      btnB.textContent = "B: " + q.options.B;
+      messageEl.textContent = "";
+      btnA.style.display = "inline-block";
+      btnB.style.display = "inline-block";
+      restartBtn.style.display = "none";
+    }
+
+    function checkAnswer(choice) {
+      const correct = questions[current].answer;
+      if (choice === correct) {
+        current++;
+        if (current >= questions.length) {
+          questionEl.textContent = "🎉 Herzlichen Glückwunsch! Du hast die Filterblase durchbrochen!";
+          btnA.style.display = "none";
+          btnB.style.display = "none";
+          restartBtn.style.display = "inline-block";
+        } else {
+          loadQuestion();
+        }
+      } else {
+        questionEl.textContent = "🚫 Oops! Du bist in der Filterblase gefangen.";
+        btnA.style.display = "none";
+        btnB.style.display = "none";
+        restartBtn.style.display = "inline-block";
+      }
+    }
+
+    btnA.addEventListener("click", () => checkAnswer("A"));
+    btnB.addEventListener("click", () => checkAnswer("B"));
+    restartBtn.addEventListener("click", () => {
+      current = 0;
+      loadQuestion();
+    });
+
+    loadQuestion();
+  </script>
+
+</body>
+</html>
