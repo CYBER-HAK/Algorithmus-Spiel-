@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escape the Filterblase - Quiz</title>
+  <title>Besiege die Filterblase - Quiz</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -54,7 +54,7 @@
 </head>
 <body>
 
-  <h1>Escape the Filterblase!</h1>
+  <h1>Besiege die Filterblase!</h1>
   <div id="game">
     <div class="question" id="question">Lade Frage...</div>
     <button class="btn" id="btnA">A</button>
@@ -123,6 +123,8 @@
     ];
 
     let current = 0;
+    let shuffledQuestions = [];
+
     const questionEl = document.getElementById("question");
     const btnA = document.getElementById("btnA");
     const btnB = document.getElementById("btnB");
@@ -130,9 +132,25 @@
     const restartBtn = document.getElementById("restartBtn");
     const messageEl = document.getElementById("message");
 
+    // Fisher-Yates-Shuffle
+    function shuffleArray(array) {
+      let shuffled = array.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    function startGame() {
+      shuffledQuestions = shuffleArray(questions);
+      current = 0;
+      loadQuestion();
+    }
+
     function loadQuestion() {
-      const q = questions[current];
-      questionEl.textContent = `Frage ${current + 1} von ${questions.length}: ${q.text}`;
+      const q = shuffledQuestions[current];
+      questionEl.textContent = `Frage ${current + 1} von ${shuffledQuestions.length}: ${q.text}`;
       btnA.textContent = "A: " + q.options.A;
       btnB.textContent = "B: " + q.options.B;
       messageEl.textContent = "";
@@ -143,7 +161,7 @@
     }
 
     function checkAnswer(choice) {
-      const q = questions[current];
+      const q = shuffledQuestions[current];
       const correct = q.answer;
       btnA.style.display = "none";
       btnB.style.display = "none";
@@ -160,8 +178,8 @@
 
     nextBtn.addEventListener("click", () => {
       current++;
-      if (current >= questions.length) {
-        questionEl.textContent = "🎉 Herzlichen Glückwunsch! Du hast die Filterblase durchbrochen!";
+      if (current >= shuffledQuestions.length) {
+        questionEl.textContent = "🎉 Herzlichen Glückwunsch! Du hast die Filterblase besiegt!";
         messageEl.textContent = "";
         nextBtn.style.display = "none";
         restartBtn.style.display = "inline-block";
@@ -170,15 +188,12 @@
       }
     });
 
-    restartBtn.addEventListener("click", () => {
-      current = 0;
-      loadQuestion();
-    });
+    restartBtn.addEventListener("click", startGame);
 
     btnA.addEventListener("click", () => checkAnswer("A"));
     btnB.addEventListener("click", () => checkAnswer("B"));
 
-    loadQuestion();
+    startGame();
   </script>
 
 </body>
