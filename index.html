@@ -82,7 +82,20 @@ ul { text-align: left; padding-left: 20px; }
   overflow-y: auto;
   z-index: 999;
 }
-#adminPanel h3 { margin-top:0; }
+
+/* Admin Content */
+#adminContent {
+  font-size: 1.25rem;
+  letter-spacing: 1.5px;
+}
+#adminContent ul li {
+  margin-bottom: 15px;
+}
+#adminContent button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 1rem;
+}
 </style>
 </head>
 <body>
@@ -135,7 +148,7 @@ ul { text-align: left; padding-left: 20px; }
 </div>
 
 <script>
-// --- Spiel-Setup ---
+// --- Elemente ---
 const startMenu = document.getElementById("startMenu");
 const gameDiv = document.getElementById("game");
 const infoDiv = document.getElementById("info");
@@ -144,6 +157,7 @@ const btn1 = document.getElementById("btn1");
 const btn2 = document.getElementById("btn2");
 const nextBtn = document.getElementById("nextBtn");
 const restartBtn = document.getElementById("restartBtn");
+const messageEl = document.getElementById("message");
 
 // Admin
 const adminBtn = document.getElementById("adminBtn");
@@ -171,26 +185,26 @@ let current = 0;
 function showMenu(){ startMenu.classList.remove("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.add("hidden"); clearMessages(); }
 function showInfo(){ startMenu.classList.add("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.remove("hidden"); clearMessages(); }
 function shuffleArray(arr){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function clearMessages(){ messageEl.textContent=""; nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden"); }
 
 // --- Spiel starten ---
 async function showGame(){
   startMenu.classList.add("hidden");
   infoDiv.classList.add("hidden");
+
   if(!isAdmin){
-    const savedClass = localStorage.getItem("playerClass");
-    if(!savedClass){
-      let cls = prompt("Bitte gib deine Klasse ein (max. 4 Zeichen):");
-      if(!cls || cls.length>4){ 
-        alert("Ungültige Klasse! Maximal 4 Zeichen."); 
-        showMenu(); 
-        return; 
-      }
-      let data = JSON.parse(localStorage.getItem("classData")||"{}");
-      data[cls] = (data[cls]||0)+1;
-      localStorage.setItem("classData", JSON.stringify(data));
-      localStorage.setItem("playerClass", cls);
+    let cls = prompt("Bitte gib deine Klasse ein (max. 5 Zeichen):");
+    if(!cls || cls.length > 5){
+      alert("Ungültige Klasse! Maximal 5 Zeichen.");
+      showMenu();
+      return;
     }
+    cls = cls.toUpperCase(); // Groß-/Kleinschreibung ignorieren
+    let data = JSON.parse(localStorage.getItem("classData") || "{}");
+    data[cls] = (data[cls] || 0) + 1;
+    localStorage.setItem("classData", JSON.stringify(data));
   }
+
   gameDiv.classList.remove("hidden");
   startGame();
 }
@@ -215,8 +229,6 @@ function loadQuestion(){
   nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden");
 }
 
-function clearMessages(){ messageEl.textContent=""; nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden"); }
-
 function checkAnswer(choice){
   const q = shuffledQuestions[current];
   btn1.style.display="none"; btn2.style.display="none";
@@ -232,36 +244,44 @@ function checkAnswer(choice){
 
 btn1.onclick=()=>checkAnswer(btn1.dataset.answer);
 btn2.onclick=()=>checkAnswer(btn2.dataset.answer);
-
 nextBtn.onclick=()=>{ current++; if(current>=shuffledQuestions.length){ questionEl.textContent="🎉 Du hast die Filterblase besiegt."; messageEl.textContent=""; btn1.style.display="none"; btn2.style.display="none"; nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); } else loadQuestion(); };
 restartBtn.onclick=startGame;
 
-// --- Admin Login/Logout ---
-adminBtn.onclick = ()=>{
-  adminPanel.style.display = "block";
-  if(!isAdmin) showAdminLogin();
-};
+// --- Admin Login/Statistik ---
+adminBtn.onclick = ()=>{ adminPanel.style.display="block"; if(!isAdmin) showAdminLogin(); };
 
 function showAdminLogin(){
-  adminContent.innerHTML = `<input type="password" id="adminPass" placeholder="Passwort">
+  adminContent.innerHTML = `
+    <input type="password" id="adminPass" placeholder="Passwort">
     <button id="adminLoginBtn">Login</button>
-    <div id="adminMsg" style="margin-top:10px;color:#ff4c4c;"></div>`;
+    <button id="backBtn">Zurück zum Menü</button>
+    <div id="adminMsg" style="margin-top:10px;color:#ff4c4c;"></div>
+  `;
   document.getElementById("adminLoginBtn").onclick = ()=>{
     const pass = document.getElementById("adminPass").value;
     if(pass==="x7llm@cyber"){ showAdminStats(); }
     else { document.getElementById("adminMsg").textContent="Falsches Passwort!"; }
+  };
+  document.getElementById("backBtn").onclick = ()=>{
+    adminPanel.style.display="none";
+    showMenu();
   };
 }
 
 function showAdminStats(){
   isAdmin=true;
   let data = JSON.parse(localStorage.getItem("classData")||"{}");
-  let html="<h4>Spieler-Statistiken</h4><ul>";
-  for(const cls in data){ html+=`<li>Klasse ${cls}: ${data[cls]} Spieler</li>`;}
+  let html="<h3>Spieler-Statistiken</h3><ul style='font-size:1.25rem;letter-spacing:1.5px;'>";
+  let totalPlayers = 0;
+  for(const cls in data){
+    html+=`<li>Klasse ${cls}: ${data[cls]} Spieler</li>`;
+    totalPlayers += data[cls];
+  }
   html+="</ul>";
-  html+=`<button id='resetStatsBtn' style='margin-top:10px;'>Statistik zurücksetzen</button>`;
-  html+=`<button id='logoutAdminBtn' style='margin-top:10px;'>Logout</button>`;
-  html+=`<button id='backBtn' style='margin-top:10px;'>Zurück zum Menü</button>`;
+  html+=`<p>Gesamtspieler: ${totalPlayers}</p>`;
+  html+=`<button id='resetStatsBtn'>Statistik zurücksetzen</button>`;
+  html+=`<button id='logoutAdminBtn'>Logout</button>`;
+  html+=`<button id='backBtn'>Zurück zum Menü</button>`;
   adminContent.innerHTML=html;
 
   document.getElementById("resetStatsBtn").onclick=()=>{
