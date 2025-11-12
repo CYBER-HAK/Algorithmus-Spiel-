@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Besiege die Filterblase - Quiz</title>
+  <title>Besiege die Filterblase</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,16 +14,13 @@
     }
     h1 {
       color: #00bfff;
-    }
-    .question {
-      font-size: 1.3em;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
     .btn {
       display: inline-block;
       margin: 10px;
       padding: 15px 25px;
-      font-size: 1em;
+      font-size: 1.1em;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -49,24 +46,76 @@
     }
     .message {
       margin-top: 20px;
-      font-size: 1.2em;
+      font-size: 1.1em;
       color: #f0f0f0;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
+    .hidden {
+      display: none;
+    }
+    .info {
+      max-width: 700px;
+      margin: auto;
+      text-align: left;
+      background-color: #111;
+      padding: 30px;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+    ul {
+      text-align: left;
+    }
+    a {
+      color: #00bfff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Besiege die Filterblase!</h1>
-  <div id="game">
+  <!-- Startmenü -->
+  <div id="startMenu">
+    <h1>Besiege die Filterblase</h1>
+    <p>Willst du dein Wissen über Social-Media-Algorithmen testen oder erfahren, wie du dich vor ihnen schützen kannst?</p>
+    <button class="btn" onclick="showGame()">Zum Spiel</button>
+    <button class="btn" onclick="showInfo()">Informationen</button>
+  </div>
+
+  <!-- Spielbereich -->
+  <div id="game" class="hidden">
+    <h1>Besiege die Filterblase</h1>
     <div class="question" id="question">Lade Frage...</div>
     <button class="btn" id="btnA">A</button>
     <button class="btn" id="btnB">B</button>
     <button class="btn" id="nextBtn" style="display:none;">Weiter</button>
     <button class="btn" id="restartBtn" style="display:none;">Neu starten</button>
     <div class="message" id="message"></div>
+    <br>
+    <a onclick="showMenu()">Zurück zum Menü</a>
+  </div>
+
+  <!-- Infobereich -->
+  <div id="info" class="hidden">
+    <h1>Informationen zum Social-Media-Algorithmus</h1>
+    <div class="info">
+      <p>Soziale Medien zeigen dir meist Inhalte, die zu deinen bisherigen Interessen passen. Das klingt praktisch, kann aber problematisch sein: Du bekommst nur das zu sehen, was du ohnehin schon magst. Dadurch entsteht eine sogenannte <strong>Filterblase</strong>.</p>
+
+      <p><strong>Was du gegen den Algorithmus tun kannst:</strong></p>
+      <ul>
+        <li><strong>1. Suche aktiv nach neuen Perspektiven:</strong> Folge auch Menschen oder Seiten, die andere Meinungen vertreten.</li>
+        <li><strong>2. Interagiere mit verschiedenen Themen:</strong> Like und kommentiere Beiträge, die außerhalb deiner gewohnten Interessen liegen.</li>
+        <li><strong>3. Wechsle regelmäßig deine Informationsquellen:</strong> Lies Nachrichten aus verschiedenen Medien und Plattformen.</li>
+        <li><strong>4. Sprich mit anderen über ihre Sichtweisen:</strong> Direkte Gespräche helfen, andere Perspektiven zu verstehen.</li>
+        <li><strong>5. Überprüfe deine Einstellungen:</strong> Viele Plattformen erlauben dir, den Algorithmus zu beeinflussen oder auf einen chronologischen Feed umzuschalten.</li>
+      </ul>
+
+      <p>So bleibst du offen, informiert und unabhängig vom Social-Media-Algorithmus.</p>
+    </div>
+    <br>
+    <a onclick="showMenu()">Zurück zum Menü</a>
   </div>
 
   <script>
@@ -96,7 +145,7 @@
         explanation: "Wenn du immer ähnliche Inhalte siehst, bekommst du kaum noch andere Meinungen zu Gesicht – das nennt man Filterblase."
       },
       { 
-        text: "Du siehst nur Posts von einigen Freund*innen. Das liegt daran, dass der Algorithmus:", 
+        text: "Du siehst nur Posts von einigen Freundinnen und Freunden. Das liegt daran, dass der Algorithmus:", 
         options: { A: "Posts nach Relevanz und Interaktion sortiert", B: "Alle Posts gleichzeitig anzeigen will" }, 
         answer: "A",
         explanation: "Der Algorithmus zeigt dir vor allem Posts von Personen, mit denen du oft interagierst."
@@ -130,6 +179,9 @@
     let current = 0;
     let shuffledQuestions = [];
 
+    const startMenu = document.getElementById("startMenu");
+    const infoDiv = document.getElementById("info");
+    const gameDiv = document.getElementById("game");
     const questionEl = document.getElementById("question");
     const btnA = document.getElementById("btnA");
     const btnB = document.getElementById("btnB");
@@ -137,7 +189,6 @@
     const restartBtn = document.getElementById("restartBtn");
     const messageEl = document.getElementById("message");
 
-    // Fisher-Yates-Shuffle
     function shuffleArray(array) {
       let shuffled = array.slice();
       for (let i = shuffled.length - 1; i > 0; i--) {
@@ -145,6 +196,25 @@
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
       return shuffled;
+    }
+
+    function showMenu() {
+      startMenu.classList.remove("hidden");
+      gameDiv.classList.add("hidden");
+      infoDiv.classList.add("hidden");
+    }
+
+    function showInfo() {
+      startMenu.classList.add("hidden");
+      infoDiv.classList.remove("hidden");
+      gameDiv.classList.add("hidden");
+    }
+
+    function showGame() {
+      startMenu.classList.add("hidden");
+      infoDiv.classList.add("hidden");
+      gameDiv.classList.remove("hidden");
+      startGame();
     }
 
     function startGame() {
@@ -172,11 +242,11 @@
       btnB.style.display = "none";
 
       if (choice === correct) {
-        messageEl.innerHTML = "✅ Richtig! " + q.explanation;
+        messageEl.innerHTML = "Richtig! " + q.explanation;
         nextBtn.style.display = "inline-block";
       } else {
-        questionEl.textContent = "🚫 Die Filterblase hat dich besiegt!";
-        messageEl.innerHTML = "❌ Falsch. " + q.explanation;
+        questionEl.textContent = "Die Filterblase hat dich besiegt.";
+        messageEl.innerHTML = "Falsch. " + q.explanation;
         restartBtn.style.display = "inline-block";
       }
     }
@@ -184,7 +254,7 @@
     nextBtn.addEventListener("click", () => {
       current++;
       if (current >= shuffledQuestions.length) {
-        questionEl.textContent = "🎉 Herzlichen Glückwunsch! Du hast die Filterblase besiegt!";
+        questionEl.textContent = "Herzlichen Glückwunsch! Du hast die Filterblase besiegt.";
         messageEl.textContent = "";
         nextBtn.style.display = "none";
         restartBtn.style.display = "inline-block";
@@ -194,12 +264,8 @@
     });
 
     restartBtn.addEventListener("click", startGame);
-
     btnA.addEventListener("click", () => checkAnswer("A"));
     btnB.addEventListener("click", () => checkAnswer("B"));
-
-    startGame();
   </script>
-
 </body>
 </html>
