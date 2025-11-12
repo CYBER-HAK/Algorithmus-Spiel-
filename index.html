@@ -179,4 +179,133 @@ const messageEl = document.getElementById("message");
 
 // Admin
 const adminBtn = document.getElementById("adminBtn");
-const adminPanel = document.g
+const adminPanel = document.getElementById("adminPanel");
+const adminContent = document.getElementById("adminContent");
+let classData = JSON.parse(localStorage.getItem("classData")) || {};
+let isAdmin = false;
+
+// SHUFFLE ARRAY
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+// SHOW MENU / INFO / GAME
+function showMenu(){ startMenu.classList.remove("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.add("hidden"); clearMessages(); }
+function showInfo(){ startMenu.classList.add("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.remove("hidden"); clearMessages(); }
+
+// KLASSENEINGABE VOR SPIELSTART
+function showGame(){
+  startMenu.classList.add("hidden");
+  infoDiv.classList.add("hidden");
+
+  if(!isAdmin){
+    const savedClass = localStorage.getItem("playerClass");
+    if(!savedClass){
+      let cls = prompt("Bitte gib deine Klasse ein (einmalig pro Gerät):");
+      if(cls){
+        localStorage.setItem("playerClass", cls);
+        classData[cls] = (classData[cls]||0) + 1;
+        localStorage.setItem("classData", JSON.stringify(classData));
+      }
+    }
+  }
+
+  gameDiv.classList.remove("hidden");
+  startGame();
+}
+
+// SPIEL LOGIK
+function startGame(){
+  shuffledQuestions = shuffleArray(questions);
+  current = 0;
+  loadQuestion();
+}
+
+function loadQuestion(){
+  const q = shuffledQuestions[current];
+  questionEl.textContent = `Frage ${current+1} von ${shuffledQuestions.length}: ${q.text}`;
+  btnA.textContent = "A: " + q.options.A;
+  btnB.textContent = "B: " + q.options.B;
+  messageEl.textContent = "";
+  btnA.style.display="inline-block"; btnB.style.display="inline-block";
+  btnA.disabled = false; btnB.disabled = false;
+  nextBtn.classList.add("hidden");
+  restartBtn.classList.add("hidden");
+}
+
+function clearMessages(){ messageEl.textContent=""; nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden"); }
+
+function checkAnswer(choice){
+  const q = shuffledQuestions[current];
+  btnA.disabled = true; btnB.disabled = true;
+  if(choice===q.answer){
+    messageEl.textContent="✅ Richtig. " + q.explanation;
+    nextBtn.classList.remove("hidden");
+  } else{
+    questionEl.textContent="❌ Die Filterblase hat dich besiegt.";
+    messageEl.textContent="Falsch. " + q.explanation;
+    restartBtn.classList.remove("hidden");
+  }
+}
+
+// BUTTONS sicher binden
+btnA.onclick = () => checkAnswer("A");
+btnB.onclick = () => checkAnswer("B");
+nextBtn.onclick = () => {
+  current++;
+  if(current >= shuffledQuestions.length){
+    questionEl.textContent = "🎉 Du hast die Filterblase besiegt.";
+    messageEl.textContent = "";
+    nextBtn.classList.add("hidden");
+    restartBtn.classList.remove("hidden");
+  } else { loadQuestion(); }
+};
+restartBtn.onclick = startGame;
+
+// ADMIN LOGIK
+adminBtn.onclick = () => {
+  adminPanel.style.display = adminPanel.style.display==="none" ? "block" : "none";
+  showAdminLogin();
+};
+
+function showAdminLogin(){
+  adminContent.innerHTML = `
+    <input type="password" id="adminPass" placeholder="Passwort">
+    <button id="adminLoginBtn">Login</button>
+    <div id="adminMsg" style="margin-top:10px;color:#ff4c4c;"></div>
+  `;
+  document.getElementById("adminLoginBtn").onclick = () => {
+    const pass = document.getElementById("adminPass").value;
+    if(pass==="x7llm@cyber"){ showAdminStats(); }
+    else { document.getElementById("adminMsg").textContent = "Falsches Passwort!"; }
+  };
+}
+
+function showAdminStats(){
+  isAdmin = true;
+  let html = "<h4>Spieler-Statistiken</h4><ul>";
+  for(const cls in classData){
+    html += `<li>Klasse ${cls}: ${classData[cls]} Spieler</li>`;
+  }
+  html += "</ul>";
+  html += `<button id="resetStatsBtn" style="margin-top:10px;">Statistik zurücksetzen</button>`;
+  adminContent.innerHTML = html;
+
+  document.getElementById("resetStatsBtn").onclick = () => {
+    if(confirm("Willst du wirklich die Statistik zurücksetzen?")){
+      classData = {};
+      localStorage.setItem("classData", JSON.stringify(classData));
+      showAdminStats();
+    }
+  };
+}
+
+showMenu();
+</script>
+</body>
+</html>
