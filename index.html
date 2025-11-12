@@ -5,87 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Besiege die Filterblase</title>
 <style>
-  body {
-    margin:0;
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: #fff;
-    text-align: center;
-    padding: 40px 10px;
-  }
-  h1 { color: #00bfff; margin-bottom: 20px; }
-  .panel {
-    background-color: #111;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 700px;
-    margin: 0 auto 20px auto;
-    text-align: center;
-  }
-  .question { font-size: 1.15rem; margin-bottom: 20px; }
-  .btn {
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 25px;
-    margin: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    display: inline-block;
-  }
-  .btn:hover { background-color: #3399ff; }
-  .btn-danger { background-color: #ff4c4c; }
-  .btn-danger:hover { background-color: #e84343; }
-  .btn-secondary { background-color: #008CBA; }
-  .btn-secondary:hover { background-color: #33b5e5; }
-  .hidden { display: none; }
-  .message { margin-top: 15px; color: #eaeaea; }
-  a.link-like {
-    display: block;
-    margin-top: 15px;
-    color: #00bfff;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  ul { text-align: left; padding-left: 20px; }
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  padding: 40px 10px;
+}
+h1 { color: #00bfff; margin-bottom: 20px; }
+.panel {
+  background-color: #111;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 700px;
+  margin: 0 auto 20px auto;
+  text-align: center;
+}
+.question { font-size: 1.15rem; margin-bottom: 20px; }
+.btn {
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  margin: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: inline-block;
+}
+.btn:hover { background-color: #3399ff; }
+.btn-danger { background-color: #ff4c4c; }
+.btn-danger:hover { background-color: #e84343; }
+.btn-secondary { background-color: #008CBA; }
+.btn-secondary:hover { background-color: #33b5e5; }
+.hidden { display: none; }
+.message { margin-top: 15px; color: #eaeaea; }
+a.link-like {
+  display: block;
+  margin-top: 15px;
+  color: #00bfff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+ul { text-align: left; padding-left: 20px; }
 
-  /* Info Menü größer & mehr Abstand */
-  #info .panel p, #info .panel ul li {
-    font-size: 1.25rem;
-    margin-bottom: 15px;
-  }
+/* Info Menü größer & Abstand */
+#info .panel p, #info .panel ul li {
+  font-size: 1.25rem;
+  margin-bottom: 15px;
+}
 
-  /* Admin Button & Panel */
-  #adminBtn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #444;
-    color: #fff;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-  }
-  #adminPanel {
-    position: fixed;
-    bottom: 60px;
-    right: 20px;
-    background-color: #222;
-    color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    display: none;
-    max-width: 300px;
-    max-height: 400px;
-    overflow-y: auto;
-    z-index: 999;
-  }
+/* Admin Button & Panel */
+#adminBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #444;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+#adminPanel {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  background-color: #222;
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  display: none;
+  max-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 999;
+}
 
-  @media (max-width: 500px) {
-    .btn { width: 100%; margin: 10px 0; }
-  }
+@media (max-width: 500px) {
+  .btn { width: 100%; margin: 10px 0; }
+}
 </style>
 </head>
 <body>
@@ -103,11 +103,11 @@
   <h1>Besiege die Filterblase</h1>
   <div class="panel">
     <div class="question" id="question">Lade Frage...</div>
-    <button class="btn" id="btnA">A</button>
-    <button class="btn" id="btnB">B</button>
+    <button class="btn" id="btn1">A</button>
+    <button class="btn" id="btn2">B</button>
     <div style="margin-top:10px;">
       <button class="btn btn-secondary hidden" id="nextBtn">Weiter</button>
-      <button class="btn btn-danger hidden" id="restartBtn">Neu starten</button>
+      <button class="btn btn-danger hidden" id="restartBtn">Erneut versuchen</button>
     </div>
     <div class="message" id="message"></div>
   </div>
@@ -130,7 +130,7 @@
   <a class="link-like" onclick="showMenu()">Zurück zum Menü</a>
 </div>
 
-<!-- Admin Button -->
+<!-- Admin -->
 <button id="adminBtn">Admin</button>
 <div id="adminPanel">
   <h3>Admin-Panel</h3>
@@ -138,41 +138,12 @@
 </div>
 
 <script>
-const questions = [
-  { text: "Ein Algorithmus zeigt dir hauptsächlich Inhalte, die du oft likest oder kommentierst. Was ist das Ziel?",
-    options: { A: "Dir möglichst viele verschiedene Meinungen zeigen", B: "Dir Inhalte zeigen, die dich am meisten interessieren" },
-    answer: "B",
-    explanation: "Algorithmen zeigen vorrangig Inhalte, die deine Aufmerksamkeit halten."},
-  { text: "Warum landen manche Posts nicht in deinem Feed, obwohl Freunde sie geteilt haben?",
-    options: { A: "Der Algorithmus entscheidet, welche Inhalte relevant sind", B: "Dein Internet ist zu langsam" },
-    answer: "A",
-    explanation: "Plattformen filtern Inhalte nach Relevanzkriterien."},
-  { text: "Wenn du lange ein Video anschaust, wird der Algorithmus:",
-    options: { A: "Dir ähnliche Videos vorschlagen", B: "Dir keine Videos mehr zeigen" },
-    answer: "A",
-    explanation: "Lange Wiedergabedauer signalisiert Interesse."},
-  { text: "Filterblasen entstehen, weil der Algorithmus:",
-    options: { A: "Nur Inhalte zeigt, die du magst oder die dich bestätigen", B: "Dir zufällige Inhalte aus aller Welt zeigt" },
-    answer: "A",
-    explanation: "Algorithmen bevorzugen bestätigende Inhalte."},
-  { text: "Wie kannst du verhindern, dass der Algorithmus dich in einer Filterblase hält?",
-    options: { A: "Unterschiedliche Inhalte aktiv suchen und liken", B: "Nur die Inhalte liken, die du sowieso magst" },
-    answer: "A",
-    explanation: "Vielfältige Interaktionen sorgen für abwechslungsreichere Inhalte."},
-  { text: "Warum kann ein Social-Media-Algorithmus gefährlich sein?",
-    options: { A: "Er kann dich in einer Filterblase halten und deine Sicht auf die Welt verzerren", B: "Er löscht automatisch alle Nachrichten" },
-    answer: "A",
-    explanation: "Filterblasen können zu eingeschränktem Blick und Polarisierung führen."}
-];
-
-let current = 0;
-let shuffledQuestions = [];
 const startMenu = document.getElementById("startMenu");
 const gameDiv = document.getElementById("game");
 const infoDiv = document.getElementById("info");
 const questionEl = document.getElementById("question");
-const btnA = document.getElementById("btnA");
-const btnB = document.getElementById("btnB");
+const btn1 = document.getElementById("btn1");
+const btn2 = document.getElementById("btn2");
 const nextBtn = document.getElementById("nextBtn");
 const restartBtn = document.getElementById("restartBtn");
 const messageEl = document.getElementById("message");
@@ -184,42 +155,48 @@ const adminContent = document.getElementById("adminContent");
 let classData = JSON.parse(localStorage.getItem("classData")) || {};
 let isAdmin = false;
 
-// SHUFFLE ARRAY
-function shuffleArray(arr){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
-}
+// 9 Fragen
+const questions = [
+  {text:"Ein Algorithmus zeigt Inhalte, die du oft likst oder kommentierst. Ziel?", options:{A:"Viele verschiedene Meinungen",B:"Inhalte die dich interessieren"},answer:"B",explanation:"Algorithmen zeigen vor allem Inhalte, die deine Aufmerksamkeit halten."},
+  {text:"Warum erscheinen manche Posts nicht im Feed, obwohl Freunde sie teilen?", options:{A:"Algorithmus filtert relevante Inhalte",B:"Internet zu langsam"},answer:"A",explanation:"Plattformen filtern Inhalte nach Relevanz."},
+  {text:"Wenn du ein Video lange ansiehst, was macht der Algorithmus?", options:{A:"Zeigt ähnliche Videos",B:"Zeigt keine Videos mehr"},answer:"A",explanation:"Lange Wiedergabedauer signalisiert Interesse."},
+  {text:"Filterblasen entstehen, weil der Algorithmus…", options:{A:"Nur bestätigende Inhalte zeigt",B:"Zufällige Inhalte aus aller Welt"},answer:"A",explanation:"Algorithmen bevorzugen bestätigende Inhalte."},
+  {text:"Wie kann man Filterblasen vermeiden?", options:{A:"Vielfältige Inhalte aktiv suchen und liken",B:"Nur Inhalte liken die man mag"},answer:"A",explanation:"Abwechslungsreiche Interaktionen führen zu vielfältigeren Inhalten."},
+  {text:"Warum kann ein Social-Media-Algorithmus gefährlich sein?", options:{A:"Kann Sicht auf Welt verzerren",B:"Löscht automatisch Nachrichten"},answer:"A",explanation:"Filterblasen führen zu eingeschränktem Blick und Polarisierung."},
+  {text:"Was passiert, wenn man nur gleichartige Inhalte konsumiert?", options:{A:"Filterblase verstärkt sich",B:"Algorithmus pausiert"},answer:"A",explanation:"Der Algorithmus verstärkt ähnliche Inhalte."},
+  {text:"Wie erkennt ein Algorithmus Interesse?", options:{A:"Lange Verweildauer bei Inhalt",B:"Zufällige Likes"},answer:"A",explanation:"Lange Verweildauer signalisiert Interesse."},
+  {text:"Warum ist es wichtig, andere Perspektiven zu folgen?", options:{A:"Reduziert Filterblasen",B:"Algorithmus blendet Inhalte aus"},answer:"A",explanation:"Andere Perspektiven verhindern einseitige Ansichten."}
+];
 
-// SHOW MENU / INFO / GAME
+let shuffledQuestions = [];
+let current = 0;
+
+// Menu / Info
 function showMenu(){ startMenu.classList.remove("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.add("hidden"); clearMessages(); }
 function showInfo(){ startMenu.classList.add("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.remove("hidden"); clearMessages(); }
 
-// KLASSENEINGABE VOR SPIELSTART
+// Shuffle
+function shuffleArray(arr){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+// Spiel starten
 function showGame(){
   startMenu.classList.add("hidden");
   infoDiv.classList.add("hidden");
-
   if(!isAdmin){
     const savedClass = localStorage.getItem("playerClass");
     if(!savedClass){
       let cls = prompt("Bitte gib deine Klasse ein (einmalig pro Gerät):");
       if(cls){
         localStorage.setItem("playerClass", cls);
-        classData[cls] = (classData[cls]||0) + 1;
+        classData[cls] = (classData[cls]||0)+1;
         localStorage.setItem("classData", JSON.stringify(classData));
       }
     }
   }
-
   gameDiv.classList.remove("hidden");
   startGame();
 }
 
-// SPIEL LOGIK
 function startGame(){
   shuffledQuestions = shuffleArray(questions);
   current = 0;
@@ -229,11 +206,14 @@ function startGame(){
 function loadQuestion(){
   const q = shuffledQuestions[current];
   questionEl.textContent = `Frage ${current+1} von ${shuffledQuestions.length}: ${q.text}`;
-  btnA.textContent = "A: " + q.options.A;
-  btnB.textContent = "B: " + q.options.B;
+  const keys = Object.keys(q.options);
+  btn1.textContent = keys[0]+": "+q.options[keys[0]];
+  btn2.textContent = keys[1]+": "+q.options[keys[1]];
+  btn1.dataset.answer = keys[0];
+  btn2.dataset.answer = keys[1];
   messageEl.textContent = "";
-  btnA.style.display="inline-block"; btnB.style.display="inline-block";
-  btnA.disabled = false; btnB.disabled = false;
+  btn1.style.display="inline-block"; btn2.style.display="inline-block";
+  btn1.disabled=false; btn2.disabled=false;
   nextBtn.classList.add("hidden");
   restartBtn.classList.add("hidden");
 }
@@ -242,67 +222,70 @@ function clearMessages(){ messageEl.textContent=""; nextBtn.classList.add("hidde
 
 function checkAnswer(choice){
   const q = shuffledQuestions[current];
-  btnA.disabled = true; btnB.disabled = true;
+  btn1.style.display="none"; btn2.style.display="none";
   if(choice===q.answer){
-    messageEl.textContent="✅ Richtig. " + q.explanation;
+    messageEl.textContent="✅ Richtig. "+q.explanation;
     nextBtn.classList.remove("hidden");
   } else{
     questionEl.textContent="❌ Die Filterblase hat dich besiegt.";
-    messageEl.textContent="Falsch. " + q.explanation;
+    messageEl.textContent="Falsch. "+q.explanation;
     restartBtn.classList.remove("hidden");
   }
 }
 
-// BUTTONS sicher binden
-btnA.onclick = () => checkAnswer("A");
-btnB.onclick = () => checkAnswer("B");
-nextBtn.onclick = () => {
+btn1.onclick=()=>checkAnswer(btn1.dataset.answer);
+btn2.onclick=()=>checkAnswer(btn2.dataset.answer);
+nextBtn.onclick=()=>{
   current++;
-  if(current >= shuffledQuestions.length){
-    questionEl.textContent = "🎉 Du hast die Filterblase besiegt.";
-    messageEl.textContent = "";
-    nextBtn.classList.add("hidden");
-    restartBtn.classList.remove("hidden");
+  if(current>=shuffledQuestions.length){
+    questionEl.textContent="🎉 Du hast die Filterblase besiegt.";
+    messageEl.textContent="";
+    btn1.style.display="none"; btn2.style.display="none";
+    nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden");
   } else { loadQuestion(); }
 };
-restartBtn.onclick = startGame;
+restartBtn.onclick=startGame;
 
-// ADMIN LOGIK
-adminBtn.onclick = () => {
-  adminPanel.style.display = adminPanel.style.display==="none" ? "block" : "none";
-  showAdminLogin();
+// Admin Login/Logout
+adminBtn.onclick = ()=>{
+  adminPanel.style.display = adminPanel.style.display==="none"?"block":"none";
+  if(!isAdmin) showAdminLogin();
+  else logoutAdmin();
 };
 
 function showAdminLogin(){
-  adminContent.innerHTML = `
-    <input type="password" id="adminPass" placeholder="Passwort">
+  adminContent.innerHTML = `<input type="password" id="adminPass" placeholder="Passwort">
     <button id="adminLoginBtn">Login</button>
-    <div id="adminMsg" style="margin-top:10px;color:#ff4c4c;"></div>
-  `;
-  document.getElementById("adminLoginBtn").onclick = () => {
+    <div id="adminMsg" style="margin-top:10px;color:#ff4c4c;"></div>`;
+  document.getElementById("adminLoginBtn").onclick = ()=>{
     const pass = document.getElementById("adminPass").value;
     if(pass==="x7llm@cyber"){ showAdminStats(); }
-    else { document.getElementById("adminMsg").textContent = "Falsches Passwort!"; }
+    else { document.getElementById("adminMsg").textContent="Falsches Passwort!"; }
   };
 }
 
 function showAdminStats(){
-  isAdmin = true;
-  let html = "<h4>Spieler-Statistiken</h4><ul>";
-  for(const cls in classData){
-    html += `<li>Klasse ${cls}: ${classData[cls]} Spieler</li>`;
-  }
-  html += "</ul>";
-  html += `<button id="resetStatsBtn" style="margin-top:10px;">Statistik zurücksetzen</button>`;
-  adminContent.innerHTML = html;
+  isAdmin=true;
+  let html="<h4>Spieler-Statistiken</h4><ul>";
+  for(const cls in classData){ html+=`<li>Klasse ${cls}: ${classData[cls]} Spieler</li>`;}
+  html+="</ul><button id='resetStatsBtn' style='margin-top:10px;'>Statistik zurücksetzen</button>";
+  html+="<button id='logoutAdminBtn' style='margin-top:10px;'>Logout</button>";
+  adminContent.innerHTML=html;
 
-  document.getElementById("resetStatsBtn").onclick = () => {
+  document.getElementById("resetStatsBtn").onclick=()=>{
     if(confirm("Willst du wirklich die Statistik zurücksetzen?")){
-      classData = {};
+      classData={};
       localStorage.setItem("classData", JSON.stringify(classData));
       showAdminStats();
     }
   };
+  document.getElementById("logoutAdminBtn").onclick=logoutAdmin;
+}
+
+function logoutAdmin(){
+  isAdmin=false;
+  adminPanel.style.display="none";
+  showAdminLogin();
 }
 
 showMenu();
