@@ -180,12 +180,15 @@ async function showGame(){
     const savedClass = localStorage.getItem("playerClass");
     if(!savedClass){
       let cls = prompt("Bitte gib deine Klasse ein (max. 4 Zeichen):");
-      if(cls && cls.length <=4){
-        let data = JSON.parse(localStorage.getItem("classData")||"{}");
-        data[cls] = (data[cls]||0)+1;
-        localStorage.setItem("classData", JSON.stringify(data));
-        localStorage.setItem("playerClass", cls);
+      if(!cls || cls.length>4){ 
+        alert("Ungültige Klasse! Maximal 4 Zeichen."); 
+        showMenu(); 
+        return; 
       }
+      let data = JSON.parse(localStorage.getItem("classData")||"{}");
+      data[cls] = (data[cls]||0)+1;
+      localStorage.setItem("classData", JSON.stringify(data));
+      localStorage.setItem("playerClass", cls);
     }
   }
   gameDiv.classList.remove("hidden");
@@ -237,7 +240,6 @@ restartBtn.onclick=startGame;
 adminBtn.onclick = ()=>{
   adminPanel.style.display = "block";
   if(!isAdmin) showAdminLogin();
-  else logoutAdmin();
 };
 
 function showAdminLogin(){
@@ -259,6 +261,7 @@ function showAdminStats(){
   html+="</ul>";
   html+=`<button id='resetStatsBtn' style='margin-top:10px;'>Statistik zurücksetzen</button>`;
   html+=`<button id='logoutAdminBtn' style='margin-top:10px;'>Logout</button>`;
+  html+=`<button id='backBtn' style='margin-top:10px;'>Zurück zum Menü</button>`;
   adminContent.innerHTML=html;
 
   document.getElementById("resetStatsBtn").onclick=()=>{
@@ -268,6 +271,10 @@ function showAdminStats(){
     }
   };
   document.getElementById("logoutAdminBtn").onclick=logoutAdmin;
+  document.getElementById("backBtn").onclick=()=>{
+    adminPanel.style.display="none";
+    showMenu();
+  };
 }
 
 function logoutAdmin(){
