@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       JSONBIN_KEY: ${{ secrets.JSONBIN_KEY }}
-      BIN_ID: "DEINE_BIN_ID_HIER" # <-- hier deine Bin-ID eintragen
+      BIN_ID: "69149f5243b1c97be9a91a1f" # <-- hier deine Bin-ID eintragen
     steps:
       - name: Update JSONBin
         run: |
