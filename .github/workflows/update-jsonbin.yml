@@ -17,4 +17,4 @@ jobs:
             -H "X-Master-Key: $JSONBIN_KEY" \
             --data @data.json \
             https://api.jsonbin.io/v3/b/${BIN_ID}
-Add JSONBin update workflow
+Add JSONBin workflow
