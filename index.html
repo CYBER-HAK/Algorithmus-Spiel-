@@ -55,44 +55,6 @@ ul { text-align: left; padding-left: 20px; }
   font-size: 1.25rem;
   margin-bottom: 15px;
 }
-
-/* Admin Button & Panel */
-#adminBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #444;
-  color: #fff;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  z-index: 1000;
-}
-#adminPanel {
-  position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-color: rgba(0,0,0,0.95);
-  color: #fff;
-  padding: 20px;
-  display: none;
-  overflow-y: auto;
-  z-index: 999;
-}
-
-/* Admin Content */
-#adminContent {
-  font-size: 1.25rem;
-  letter-spacing: 1.5px;
-}
-#adminContent button {
-  margin-top: 10px;
-  padding: 10px 15px;
-  font-size: 1rem;
-}
 </style>
 </head>
 <body>
@@ -100,8 +62,8 @@ ul { text-align: left; padding-left: 20px; }
 <div id="startMenu">
   <h1>Besiege die Filterblase</h1>
   <div class="panel">
-    <p>Möchtest du testen, wie Social-Media-Algorithmen Inhalte zeigen, oder erfahren, wie du dich davor schützt?</p>
-    <button class="btn" onclick="showGame()">Zum Quiz</button>
+    <p>Willst du dein Wissen über Social-Media-Algorithmen testen oder erfahren, wie du dich vor ihnen schützen kannst?</p>
+    <button class="btn" onclick="showGame()">Zum Spiel</button>
     <button class="btn" onclick="showInfo()">Informationen</button>
   </div>
 </div>
@@ -122,30 +84,23 @@ ul { text-align: left; padding-left: 20px; }
 </div>
 
 <div id="info" class="hidden">
-  <h1>Informationen</h1>
+  <h1>Informationen zum Social-Media-Algorithmus</h1>
   <div class="panel">
-    <p>Social Media zeigt Inhalte, die zu deinen bisherigen Interessen passen. Dadurch entstehen Filterblasen.</p>
-    <p>Tipps, um Filterblasen zu vermeiden:</p>
+    <p>Soziale Medien zeigen dir meist Inhalte, die zu deinen bisherigen Interessen passen. Dadurch entsteht eine Filterblase.</p>
+    <p><strong>Was du gegen den Social-Media-Algorithmus tun kannst:</strong></p>
     <ul>
-      <li>1. Suche aktiv nach anderen Perspektiven.</li>
-      <li>2. Interagiere mit verschiedenen Themen.</li>
-      <li>3. Wechsle regelmäßig deine Informationsquellen.</li>
-      <li>4. Nutze chronologische Feeds oder Newsletter.</li>
-      <li>5. Mache digitale Pausen und kontrolliere deine Nutzung.</li>
+      <li>1. Suche aktiv nach neuen Perspektiven: Folge auch andere Standpunkte.</li>
+      <li>2. Interagiere mit verschiedenen Themen: Like Beiträge außerhalb deiner Gewohnheiten.</li>
+      <li>3. Wechsle regelmäßig deine Informationsquellen: Konsumiere verschiedene Medien.</li>
+      <li>4. Reduziere algorithmische Verstärkung: Nutze chronologische Feeds und Newsletter.</li>
+      <li>5. Mache digitale Pausen und kontrollierte Nutzung: Setze Zeitlimits und überprüfe Inhalte bewusst.</li>
     </ul>
   </div>
   <a class="link-like" onclick="showMenu()">Zurück zum Menü</a>
 </div>
 
-<!-- Admin -->
-<button id="adminBtn">Admin</button>
-<div id="adminPanel">
-  <h3>Admin-Bereich</h3>
-  <div id="adminContent">Bitte Passwort eingeben:</div>
-</div>
-
 <script>
-// Elemente
+// --- Elemente ---
 const startMenu = document.getElementById("startMenu");
 const gameDiv = document.getElementById("game");
 const infoDiv = document.getElementById("info");
@@ -156,48 +111,32 @@ const nextBtn = document.getElementById("nextBtn");
 const restartBtn = document.getElementById("restartBtn");
 const messageEl = document.getElementById("message");
 
-// Admin
-const adminBtn = document.getElementById("adminBtn");
-const adminPanel = document.getElementById("adminPanel");
-const adminContent = document.getElementById("adminContent");
-let isAdmin = false;
-
-// Fragen
+// --- Fragen ---
 const questions = [
-  {text:"Ein Algorithmus zeigt Inhalte, die du oft likst oder kommentierst. Ziel?", options:{A:"Viele verschiedene Meinungen",B:"Inhalte die dich interessieren"},answer:"B",explanation:"Algorithmen zeigen Inhalte, die deine Aufmerksamkeit halten."},
+  {text:"Ein Algorithmus zeigt Inhalte, die du oft likst oder kommentierst. Ziel?", options:{A:"Viele verschiedene Meinungen",B:"Inhalte die dich interessieren"},answer:"B",explanation:"Algorithmen zeigen vor allem Inhalte, die deine Aufmerksamkeit halten."},
   {text:"Warum erscheinen manche Posts nicht im Feed, obwohl Freunde sie teilen?", options:{A:"Algorithmus filtert relevante Inhalte",B:"Internet zu langsam"},answer:"A",explanation:"Plattformen filtern Inhalte nach Relevanz."},
-  {text:"Wenn du ein Video lange ansiehst, was macht der Algorithmus?", options:{A:"Zeigt ähnliche Videos",B:"Zeigt keine Videos mehr"},answer:"A",explanation:"Lange Wiedergabe signalisiert Interesse."},
-  {text:"Filterblasen entstehen, weil der Algorithmus…", options:{A:"Nur bestätigende Inhalte zeigt",B:"Zufällige Inhalte aus aller Welt"},answer:"A",explanation:"Algorithmen bevorzugen Inhalte, die du kennst."},
-  {text:"Wie kann man Filterblasen vermeiden?", options:{A:"Vielfältige Inhalte aktiv suchen und liken",B:"Nur Inhalte liken die man mag"},answer:"A",explanation:"Abwechslungsreiche Interaktionen zeigen dem Algorithmus andere Inhalte."},
-  {text:"Warum kann ein Social-Media-Algorithmus problematisch sein?", options:{A:"Kann Sicht auf Welt verzerren",B:"Löscht automatisch Nachrichten"},answer:"A",explanation:"Filterblasen können einseitige Sichtweisen verstärken."}
+  {text:"Wenn du ein Video lange ansiehst, was macht der Algorithmus?", options:{A:"Zeigt ähnliche Videos",B:"Zeigt keine Videos mehr"},answer:"A",explanation:"Lange Wiedergabedauer signalisiert Interesse."},
+  {text:"Filterblasen entstehen, weil der Algorithmus…", options:{A:"Nur bestätigende Inhalte zeigt",B:"Zufällige Inhalte aus aller Welt"},answer:"A",explanation:"Algorithmen bevorzugen bestätigende Inhalte."},
+  {text:"Wie kann man Filterblasen vermeiden?", options:{A:"Vielfältige Inhalte aktiv suchen und liken",B:"Nur Inhalte liken die man mag"},answer:"A",explanation:"Abwechslungsreiche Interaktionen führen zu vielfältigeren Inhalten."},
+  {text:"Warum kann ein Social-Media-Algorithmus gefährlich sein?", options:{A:"Kann Sicht auf Welt verzerren",B:"Löscht automatisch Nachrichten"},answer:"A",explanation:"Filterblasen führen zu eingeschränktem Blick und Polarisierung."},
+  {text:"Was passiert, wenn man nur gleichartige Inhalte konsumiert?", options:{A:"Filterblase verstärkt sich",B:"Algorithmus pausiert"},answer:"A",explanation:"Der Algorithmus verstärkt ähnliche Inhalte."},
+  {text:"Wie erkennt ein Algorithmus Interesse?", options:{A:"Lange Verweildauer bei Inhalt",B:"Zufällige Likes"},answer:"A",explanation:"Lange Verweildauer signalisiert Interesse."},
+  {text:"Warum ist es wichtig, andere Perspektiven zu folgen?", options:{A:"Reduziert Filterblasen",B:"Algorithmus blendet Inhalte aus"},answer:"A",explanation:"Andere Perspektiven verhindern einseitige Ansichten."}
 ];
 
 let shuffledQuestions = [];
 let current = 0;
 
-// Funktionen
+// --- Funktionen ---
 function showMenu(){ startMenu.classList.remove("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.add("hidden"); clearMessages(); }
 function showInfo(){ startMenu.classList.add("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.remove("hidden"); clearMessages(); }
 function shuffleArray(arr){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function clearMessages(){ messageEl.textContent=""; nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden"); }
 
-async function showGame(){
+// --- Spiel starten ---
+function showGame(){
   startMenu.classList.add("hidden");
   infoDiv.classList.add("hidden");
-
-  if(!isAdmin){
-    let cls = prompt("Gib deine Klasse ein (max. 5 Zeichen):");
-    if(!cls || cls.length > 5){
-      alert("Ungültige Eingabe! Maximal 5 Zeichen.");
-      showMenu();
-      return;
-    }
-    cls = cls.toUpperCase();
-    let data = JSON.parse(localStorage.getItem("classData") || "{}");
-    data[cls] = (data[cls] || 0) + 1;
-    localStorage.setItem("classData", JSON.stringify(data));
-  }
-
   gameDiv.classList.remove("hidden");
   startGame();
 }
@@ -229,7 +168,7 @@ function checkAnswer(choice){
     messageEl.textContent="✅ Richtig. "+q.explanation;
     nextBtn.classList.remove("hidden");
   } else{
-    questionEl.textContent="❌ Du hast die Frage nicht richtig beantwortet.";
+    questionEl.textContent="❌ Die Filterblase hat dich besiegt.";
     messageEl.textContent="Falsch. "+q.explanation;
     restartBtn.classList.remove("hidden");
   }
@@ -237,44 +176,9 @@ function checkAnswer(choice){
 
 btn1.onclick=()=>checkAnswer(btn1.dataset.answer);
 btn2.onclick=()=>checkAnswer(btn2.dataset.answer);
-nextBtn.onclick=()=>{ current++; if(current>=shuffledQuestions.length){ questionEl.textContent="🎉 Quiz beendet."; messageEl.textContent=""; btn1.style.display="none"; btn2.style.display="none"; nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); } else loadQuestion(); };
+
+nextBtn.onclick=()=>{ current++; if(current>=shuffledQuestions.length){ questionEl.textContent="🎉 Du hast die Filterblase besiegt."; messageEl.textContent=""; btn1.style.display="none"; btn2.style.display="none"; nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); } else loadQuestion(); };
 restartBtn.onclick=startGame;
-
-// Admin Login
-adminBtn.onclick = ()=>{ adminPanel.style.display="block"; if(!isAdmin) showAdminLogin(); };
-
-function showAdminLogin(){
-  adminContent.innerHTML = `
-    <input type="password" id="adminPass" placeholder="Passwort">
-    <button id="adminLoginBtn">Login</button>
-    <button id="backBtn">Zurück zum Menü</button>
-    <div id="adminMsg" style="margin-top:10px;color:#ff4c4c;"></div>
-  `;
-  document.getElementById("adminLoginBtn").onclick = ()=>{
-    const pass = document.getElementById("adminPass").value;
-    if(pass==="x7llm@cyber"){ showAdminPanel(); }
-    else { document.getElementById("adminMsg").textContent="Falsches Passwort!"; }
-  };
-  document.getElementById("backBtn").onclick = ()=>{ adminPanel.style.display="none"; showMenu(); };
-}
-
-function showAdminPanel(){
-  isAdmin=true;
-  let data = JSON.parse(localStorage.getItem("classData")||"{}");
-  let html="<h3>Klassenübersicht</h3><ul style='font-size:1.25rem;letter-spacing:1.5px;'>";
-  for(const cls in data){
-    html+=`<li>${cls}: ${data[cls]}</li>`;
-  }
-  html+="</ul>";
-  html+=`<button id='logoutAdminBtn'>Logout</button>`;
-  html+=`<button id='backBtn'>Zurück zum Menü</button>`;
-  adminContent.innerHTML=html;
-
-  document.getElementById("logoutAdminBtn").onclick=logoutAdmin;
-  document.getElementById("backBtn").onclick=()=>{ adminPanel.style.display="none"; showMenu(); };
-}
-
-function logoutAdmin(){ isAdmin=false; adminPanel.style.display="none"; showAdminLogin(); }
 
 showMenu();
 </script>
