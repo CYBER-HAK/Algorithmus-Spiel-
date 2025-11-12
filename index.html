@@ -39,10 +39,16 @@
     #restartBtn:hover {
       background-color: #e84343;
     }
+    #nextBtn {
+      background-color: #007BFF;
+    }
+    #nextBtn:hover {
+      background-color: #0066d6;
+    }
     .message {
       margin-top: 20px;
       font-size: 1.2em;
-      color: red;
+      color: #333;
     }
   </style>
 </head>
@@ -53,68 +59,124 @@
     <div class="question" id="question">Lade Frage...</div>
     <button class="btn" id="btnA">A</button>
     <button class="btn" id="btnB">B</button>
+    <button class="btn" id="nextBtn" style="display:none;">Weiter</button>
     <button class="btn" id="restartBtn" style="display:none;">Neu starten</button>
     <div class="message" id="message"></div>
   </div>
 
   <script>
     const questions = [
-      { text: "Ein Algorithmus zeigt dir hauptsächlich Inhalte, die du oft likest oder kommentierst. Was ist das Ziel?", options: { A: "Dir möglichst viele verschiedene Meinungen zeigen", B: "Dir Inhalte zeigen, die dich am meisten interessieren" }, answer: "B" },
-      { text: "Warum landen manche Posts nicht in deinem Feed, obwohl Freunde sie geteilt haben?", options: { A: "Der Algorithmus entscheidet, welche Inhalte relevant sind", B: "Dein Internet ist zu langsam" }, answer: "A" },
-      { text: "Wenn du lange ein Video anschaust, wird der Algorithmus:", options: { A: "Dir ähnliche Videos vorschlagen", B: "Dir keine Videos mehr zeigen" }, answer: "A" },
-      { text: "Filterblasen entstehen, weil der Algorithmus:", options: { A: "Nur Inhalte zeigt, die du magst oder die dich bestätigen", B: "Dir zufällige Inhalte aus aller Welt zeigt" }, answer: "A" },
-      { text: "Du siehst nur Posts von einigen Freund*innen. Das liegt daran, dass der Algorithmus:", options: { A: "Posts nach Relevanz und Interaktion sortiert", B: "Alle Posts gleichzeitig anzeigen will" }, answer: "A" },
-      { text: "Wie kannst du verhindern, dass der Algorithmus dich in einer Filterblase hält?", options: { A: "Unterschiedliche Inhalte aktiv suchen und liken", B: "Nur die Inhalte liken, die du sowieso magst" }, answer: "A" },
-      { text: "Der Algorithmus zeigt dir Werbung basierend auf:", options: { A: "Deinen Interessen und Interaktionen", B: "Zufälligen Produkten" }, answer: "A" },
-      { text: "Du willst, dass der Algorithmus dir neue Perspektiven zeigt. Was machst du?", options: { A: "Nur die Inhalte konsumieren, die du sowieso magst", B: "Aktiv Inhalte von anderen Meinungen folgen und entdecken" }, answer: "B" },
-      { text: "Warum kann ein Social-Media-Algorithmus gefährlich sein?", options: { A: "Er kann dich in einer Filterblase halten und deine Sicht auf die Welt verzerren", B: "Er löscht automatisch alle Nachrichten" }, answer: "A" }
+      { 
+        text: "Ein Algorithmus zeigt dir hauptsächlich Inhalte, die du oft likest oder kommentierst. Was ist das Ziel?", 
+        options: { A: "Dir möglichst viele verschiedene Meinungen zeigen", B: "Dir Inhalte zeigen, die dich am meisten interessieren" }, 
+        answer: "B",
+        explanation: "Algorithmen wollen, dass du möglichst lange auf der Plattform bleibst – deshalb zeigen sie dir Inhalte, die dich interessieren oder bestätigen."
+      },
+      { 
+        text: "Warum landen manche Posts nicht in deinem Feed, obwohl Freunde sie geteilt haben?", 
+        options: { A: "Der Algorithmus entscheidet, welche Inhalte relevant sind", B: "Dein Internet ist zu langsam" }, 
+        answer: "A",
+        explanation: "Nicht alle Beiträge werden angezeigt – der Algorithmus filtert vor, um dir nur das zu zeigen, was er für relevant hält."
+      },
+      { 
+        text: "Wenn du lange ein Video anschaust, wird der Algorithmus:", 
+        options: { A: "Dir ähnliche Videos vorschlagen", B: "Dir keine Videos mehr zeigen" }, 
+        answer: "A",
+        explanation: "Lange Watchtime signalisiert Interesse. Der Algorithmus schlägt dir deshalb ähnliche Inhalte vor."
+      },
+      { 
+        text: "Filterblasen entstehen, weil der Algorithmus:", 
+        options: { A: "Nur Inhalte zeigt, die du magst oder die dich bestätigen", B: "Dir zufällige Inhalte aus aller Welt zeigt" }, 
+        answer: "A",
+        explanation: "Wenn du immer ähnliche Inhalte siehst, bekommst du kaum noch andere Meinungen zu Gesicht – das nennt man Filterblase."
+      },
+      { 
+        text: "Du siehst nur Posts von einigen Freund*innen. Das liegt daran, dass der Algorithmus:", 
+        options: { A: "Posts nach Relevanz und Interaktion sortiert", B: "Alle Posts gleichzeitig anzeigen will" }, 
+        answer: "A",
+        explanation: "Der Algorithmus zeigt dir vor allem Posts von Personen, mit denen du oft interagierst."
+      },
+      { 
+        text: "Wie kannst du verhindern, dass der Algorithmus dich in einer Filterblase hält?", 
+        options: { A: "Unterschiedliche Inhalte aktiv suchen und liken", B: "Nur die Inhalte liken, die du sowieso magst" }, 
+        answer: "A",
+        explanation: "Wenn du auch andere Themen und Perspektiven likest, lernst du Neues – und der Algorithmus zeigt dir vielfältigere Inhalte."
+      },
+      { 
+        text: "Der Algorithmus zeigt dir Werbung basierend auf:", 
+        options: { A: "Deinen Interessen und Interaktionen", B: "Zufälligen Produkten" }, 
+        answer: "A",
+        explanation: "Je nachdem, was du dir anschaust oder likest, werden dir passende Werbeanzeigen gezeigt."
+      },
+      { 
+        text: "Du willst, dass der Algorithmus dir neue Perspektiven zeigt. Was machst du?", 
+        options: { A: "Nur die Inhalte konsumieren, die du sowieso magst", B: "Aktiv Inhalte von anderen Meinungen folgen und entdecken" }, 
+        answer: "B",
+        explanation: "Wenn du bewusst nach anderen Meinungen suchst, trainierst du den Algorithmus, dir mehr Vielfalt zu zeigen."
+      },
+      { 
+        text: "Warum kann ein Social-Media-Algorithmus gefährlich sein?", 
+        options: { A: "Er kann dich in einer Filterblase halten und deine Sicht auf die Welt verzerren", B: "Er löscht automatisch alle Nachrichten" }, 
+        answer: "A",
+        explanation: "Filterblasen können dazu führen, dass du glaubst, deine Sicht sei die einzige richtige – das erschwert offenen Diskurs."
+      }
     ];
 
     let current = 0;
-
     const questionEl = document.getElementById("question");
     const btnA = document.getElementById("btnA");
     const btnB = document.getElementById("btnB");
+    const nextBtn = document.getElementById("nextBtn");
     const restartBtn = document.getElementById("restartBtn");
     const messageEl = document.getElementById("message");
 
     function loadQuestion() {
       const q = questions[current];
-      questionEl.textContent = q.text;
+      questionEl.textContent = `Frage ${current + 1} von ${questions.length}: ${q.text}`;
       btnA.textContent = "A: " + q.options.A;
       btnB.textContent = "B: " + q.options.B;
       messageEl.textContent = "";
       btnA.style.display = "inline-block";
       btnB.style.display = "inline-block";
+      nextBtn.style.display = "none";
       restartBtn.style.display = "none";
     }
 
     function checkAnswer(choice) {
-      const correct = questions[current].answer;
+      const q = questions[current];
+      const correct = q.answer;
+      btnA.style.display = "none";
+      btnB.style.display = "none";
+
       if (choice === correct) {
-        current++;
-        if (current >= questions.length) {
-          questionEl.textContent = "🎉 Herzlichen Glückwunsch! Du hast die Filterblase durchbrochen!";
-          btnA.style.display = "none";
-          btnB.style.display = "none";
-          restartBtn.style.display = "inline-block";
-        } else {
-          loadQuestion();
-        }
+        messageEl.innerHTML = "✅ Richtig! " + q.explanation;
+        nextBtn.style.display = "inline-block";
       } else {
-        questionEl.textContent = "🚫 Oops! Du bist in der Filterblase gefangen.";
-        btnA.style.display = "none";
-        btnB.style.display = "none";
+        questionEl.textContent = "🚫 Die Filterblase hat dich besiegt!";
+        messageEl.innerHTML = "❌ Falsch. " + q.explanation;
         restartBtn.style.display = "inline-block";
       }
     }
 
-    btnA.addEventListener("click", () => checkAnswer("A"));
-    btnB.addEventListener("click", () => checkAnswer("B"));
+    nextBtn.addEventListener("click", () => {
+      current++;
+      if (current >= questions.length) {
+        questionEl.textContent = "🎉 Herzlichen Glückwunsch! Du hast die Filterblase durchbrochen!";
+        messageEl.textContent = "";
+        nextBtn.style.display = "none";
+        restartBtn.style.display = "inline-block";
+      } else {
+        loadQuestion();
+      }
+    });
+
     restartBtn.addEventListener("click", () => {
       current = 0;
       loadQuestion();
     });
+
+    btnA.addEventListener("click", () => checkAnswer("A"));
+    btnB.addEventListener("click", () => checkAnswer("B"));
 
     loadQuestion();
   </script>
