@@ -49,14 +49,10 @@ a.link-like {
   cursor: pointer;
 }
 ul { text-align: left; padding-left: 20px; }
-
-/* Info Menü größer & Abstand */
 #info .panel p, #info .panel ul li {
   font-size: 1.25rem;
   margin-bottom: 15px;
 }
-
-/* Admin Button & Panel */
 #adminBtn {
   position: fixed;
   bottom: 20px;
@@ -134,8 +130,13 @@ ul { text-align: left; padding-left: 20px; }
   <div id="adminContent">Bitte Passwort eingeben:</div>
 </div>
 
-<script>
+<!-- Stats.js wird eingebunden -->
+<script type="module" src="stats.js"></script>
+
+<script type="module">
 // --- Spiel-Setup ---
+import { updateStats } from './stats.js';
+
 const startMenu = document.getElementById("startMenu");
 const gameDiv = document.getElementById("game");
 const infoDiv = document.getElementById("info");
@@ -144,6 +145,7 @@ const btn1 = document.getElementById("btn1");
 const btn2 = document.getElementById("btn2");
 const nextBtn = document.getElementById("nextBtn");
 const restartBtn = document.getElementById("restartBtn");
+const messageEl = document.getElementById("message");
 
 // Admin
 const adminBtn = document.getElementById("adminBtn");
@@ -176,8 +178,9 @@ function shuffleArray(arr){ const a = arr.slice(); for(let i=a.length-1;i>0;i--)
 async function showGame(){
   startMenu.classList.add("hidden");
   infoDiv.classList.add("hidden");
+
   if(!isAdmin){
-    const savedClass = localStorage.getItem("playerClass");
+    let savedClass = localStorage.getItem("playerClass");
     if(!savedClass){
       let cls = prompt("Bitte gib deine Klasse ein (max. 4 Zeichen):");
       if(!cls || cls.length>4){ 
@@ -185,12 +188,15 @@ async function showGame(){
         showMenu(); 
         return; 
       }
-      let data = JSON.parse(localStorage.getItem("classData")||"{}");
-      data[cls] = (data[cls]||0)+1;
-      localStorage.setItem("classData", JSON.stringify(data));
+      // Hier updateStats aufrufen
+      await updateStats(cls);
       localStorage.setItem("playerClass", cls);
+    } else {
+      // Spieler hat schon Klasse gewählt, kann Statistik aktualisieren
+      await updateStats(savedClass);
     }
   }
+
   gameDiv.classList.remove("hidden");
   startGame();
 }
@@ -233,7 +239,15 @@ function checkAnswer(choice){
 btn1.onclick=()=>checkAnswer(btn1.dataset.answer);
 btn2.onclick=()=>checkAnswer(btn2.dataset.answer);
 
-nextBtn.onclick=()=>{ current++; if(current>=shuffledQuestions.length){ questionEl.textContent="🎉 Du hast die Filterblase besiegt."; messageEl.textContent=""; btn1.style.display="none"; btn2.style.display="none"; nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); } else loadQuestion(); };
+nextBtn.onclick=()=>{ 
+  current++; 
+  if(current>=shuffledQuestions.length){ 
+    questionEl.textContent="🎉 Du hast die Filterblase besiegt."; 
+    messageEl.textContent=""; 
+    btn1.style.display="none"; btn2.style.display="none"; 
+    nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); 
+  } else loadQuestion(); 
+};
 restartBtn.onclick=startGame;
 
 // --- Admin Login/Logout ---
@@ -274,7 +288,7 @@ function showAdminStats(){
   document.getElementById("backBtn").onclick=()=>{
     adminPanel.style.display="none";
     showMenu();
-  };
+  }
 }
 
 function logoutAdmin(){
