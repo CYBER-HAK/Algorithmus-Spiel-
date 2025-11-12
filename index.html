@@ -1,287 +1,230 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Besiege die Filterblase</title>
-  <style>
-    :root{
-      --bg:#000;
-      --accent:#007BFF;
-      --accent-hover:#3399ff;
-      --text:#fff;
-      --panel:#111;
-    }
-    html,body{
-      height:100%;
-      margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    .wrap{
-      max-width:980px;
-      margin:40px auto;
-      padding:20px;
-      text-align:center;
-    }
-    h1{ color:#00bfff; margin:0 0 18px; }
-    p{ margin:0 0 18px; font-size:1rem; color:#eaeaea; }
-
-    .btn{
-      display:inline-block;
-      background:var(--accent);
-      color:var(--text);
-      border:0;
-      border-radius:8px;
-      padding:12px 22px;
-      margin:8px;
-      font-size:1rem;
-      cursor:pointer;
-      transition:transform .08s ease, background-color .12s ease;
-    }
-    .btn:hover{ background:var(--accent-hover); transform:translateY(-2px); }
-    .btn-danger{ background:#ff4c4c; }
-    .btn-danger:hover{ background:#e84343; }
-    .btn-secondary{ background:#008CBA; }
-    .btn-secondary:hover{ background:#33b5e5; }
-
-    .hidden{ display:none; }
-
-    .panel{
-      background:var(--panel);
-      padding:18px;
-      border-radius:10px;
-      display:inline-block;
-      text-align:left;
-      max-width:760px;
-      width:100%;
-      box-sizing:border-box;
-      color:#e9eef6;
-    }
-
-    .question{
-      font-size:1.15rem;
-      margin-bottom:16px;
-    }
-    .message{
-      margin-top:18px;
-      color:#f0f0f0;
-      font-size:1rem;
-    }
-    .info ul{ padding-left:20px; }
-    a.link-like{ color:#00bfff; text-decoration:underline; cursor:pointer; display:inline-block; margin-top:12px; }
-
-    @media (max-width:600px){
-      .wrap{ padding:16px; margin:20px auto; }
-      .btn{ width:86%; max-width:320px; }
-      .panel{ padding:14px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Besiege die Filterblase</title>
+<style>
+  body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 40px 10px;
+  }
+  h1 {
+    color: #00bfff;
+    margin-bottom: 20px;
+  }
+  .panel {
+    background-color: #111;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 700px;
+    margin: 0 auto 20px auto;
+    text-align: center;
+  }
+  .question {
+    font-size: 1.15rem;
+    margin-bottom: 20px;
+  }
+  .btn {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    margin: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline-block;
+  }
+  .btn:hover { background-color: #3399ff; }
+  .btn-danger { background-color: #ff4c4c; }
+  .btn-danger:hover { background-color: #e84343; }
+  .btn-secondary { background-color: #008CBA; }
+  .btn-secondary:hover { background-color: #33b5e5; }
+  .hidden { display: none; }
+  .message { margin-top: 15px; color: #eaeaea; }
+  a.link-like {
+    display: block;
+    margin-top: 15px;
+    color: #00bfff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  ul { text-align: left; padding-left: 20px; }
+</style>
 </head>
 <body>
-  <div class="wrap">
 
-    <!-- Startmenü -->
-    <div id="startMenu">
-      <h1>Besiege die Filterblase</h1>
-      <p>Willst du dein Wissen über Social-Media-Algorithmen testen oder erfahren, wie du dich vor ihnen schützen kannst?</p>
-      <div class="panel" style="text-align:center;">
-        <button class="btn" onclick="showGame()">Zum Spiel</button>
-        <button class="btn" onclick="showInfo()">Informationen</button>
-      </div>
-    </div>
-
-    <!-- Spielbereich -->
-    <div id="game" class="hidden">
-      <h1>Besiege die Filterblase</h1>
-      <div class="panel" id="gamePanel">
-        <div class="question" id="question">Lade Frage...</div>
-
-        <div style="text-align:center;">
-          <button class="btn" id="btnA">A</button>
-          <button class="btn" id="btnB">B</button>
-        </div>
-
-        <div style="text-align:center; margin-top:12px;">
-          <button class="btn btn-secondary hidden" id="nextBtn">Weiter</button>
-          <button class="btn btn-danger hidden" id="restartBtn">Neu starten</button>
-        </div>
-
-        <div class="message" id="message"></div>
-      </div>
-
-      <a class="link-like" onclick="showMenu()">Zurück zum Menü</a>
-    </div>
-
-    <!-- Infobereich -->
-    <div id="info" class="hidden">
-      <h1>Informationen zum Social-Media-Algorithmus</h1>
-      <div class="panel info">
-        <p>Soziale Medien zeigen dir meist Inhalte, die zu deinen bisherigen Interessen passen. Das kann nützlich sein, aber es kann auch dazu führen, dass du nur noch ähnliche Meinungen und Themen siehst. Das Ergebnis ist eine Filterblase.</p>
-
-        <p><strong>Was du gegen den Social-Media-Algorithmus tun kannst:</strong></p>
-        <ul>
-          <li><strong>1. Suche aktiv nach neuen Perspektiven:</strong> Folge auch Personen oder Seiten, die andere Standpunkte vertreten.</li>
-          <li><strong>2. Interagiere mit verschiedenen Themen:</strong> Like oder kommentiere Beiträge außerhalb deiner gewohnten Themen, damit der Algorithmus Vielfalt lernt.</li>
-          <li><strong>3. Wechsle regelmäßig deine Informationsquellen:</strong> Konsumiere Nachrichten und Inhalte von unterschiedlichen Medien und Plattformen.</li>
-          <li><strong>4. Reduziere algorithmische Verstärkung:</strong> Nutze öfter chronologische Feeds, abonniere Newsletter oder speichere Quellen direkt, statt nur über Empfehlungs-Feeds zu konsumieren.</li>
-          <li><strong>5. Mache digitale Pausen und kontrollierte Nutzung:</strong> Setze bewusst Zeitlimits, überprüfe, welche Inhalte dir wirklich weiterhelfen, und nutze Apps mit klarer Quellenkontrolle.</li>
-        </ul>
-
-        <p>Durch diese Maßnahmen erhöhst du die Vielfalt deiner Infos und reduzierst die Wahrscheinlichkeit, dauerhaft in einer Filterblase zu verbleiben.</p>
-      </div>
-
-      <a class="link-like" onclick="showMenu()">Zurück zum Menü</a>
-    </div>
-
+<div id="startMenu">
+  <h1>Besiege die Filterblase</h1>
+  <div class="panel">
+    <p>Willst du dein Wissen über Social-Media-Algorithmen testen oder erfahren, wie du dich vor ihnen schützen kannst?</p>
+    <button class="btn" onclick="showGame()">Zum Spiel</button>
+    <button class="btn" onclick="showInfo()">Informationen</button>
   </div>
+</div>
 
-  <script>
-    // Fragen (zufällige Reihenfolge beim Start)
-    const questions = [
-      {
-        text: "Ein Algorithmus zeigt dir hauptsächlich Inhalte, die du oft likest oder kommentierst. Was ist das Ziel?",
-        options: { A: "Dir möglichst viele verschiedene Meinungen zeigen", B: "Dir Inhalte zeigen, die dich am meisten interessieren" },
-        answer: "B",
-        explanation: "Algorithmen zeigen vorrangig Inhalte, die deine Aufmerksamkeit halten, also Dinge, die dich interessieren oder bestätigen."
-      },
-      {
-        text: "Warum landen manche Posts nicht in deinem Feed, obwohl Freunde sie geteilt haben?",
-        options: { A: "Der Algorithmus entscheidet, welche Inhalte relevant sind", B: "Dein Internet ist zu langsam" },
-        answer: "A",
-        explanation: "Plattformen filtern Inhalte nach Relevanzkriterien; nicht jeder geteilte Beitrag wird automatisch angezeigt."
-      },
-      {
-        text: "Wenn du lange ein Video anschaust, wird der Algorithmus:",
-        options: { A: "Dir ähnliche Videos vorschlagen", B: "Dir keine Videos mehr zeigen" },
-        answer: "A",
-        explanation: "Lange Wiedergabedauer signalisiert Interesse; daraufhin werden ähnliche Inhalte empfohlen."
-      },
-      {
-        text: "Filterblasen entstehen, weil der Algorithmus:",
-        options: { A: "Nur Inhalte zeigt, die du magst oder die dich bestätigen", B: "Dir zufällige Inhalte aus aller Welt zeigt" },
-        answer: "A",
-        explanation: "Algorithmen bevorzugen bestätigende Inhalte, wodurch andere Perspektiven seltener angezeigt werden."
-      },
-      {
-        text: "Wie kannst du verhindern, dass der Algorithmus dich in einer Filterblase hält?",
-        options: { A: "Unterschiedliche Inhalte aktiv suchen und liken", B: "Nur die Inhalte liken, die du sowieso magst" },
-        answer: "A",
-        explanation: "Aktive Vielfalt in deinem Verhalten sorgt dafür, dass der Algorithmus abwechslungsreichere Inhalte lernt."
-      },
-      {
-        text: "Warum kann ein Social-Media-Algorithmus gefährlich sein?",
-        options: { A: "Er kann dich in einer Filterblase halten und deine Sicht auf die Welt verzerren", B: "Er löscht automatisch alle Nachrichten" },
-        answer: "A",
-        explanation: "Filterblasen können zu eingeschränktem Blick und Polarisierung führen, weil gegensätzliche Informationen seltener sichtbar werden."
-      }
-    ];
+<div id="game" class="hidden">
+  <h1>Besiege die Filterblase</h1>
+  <div class="panel">
+    <div class="question" id="question">Lade Frage...</div>
+    <button class="btn" id="btnA">A</button>
+    <button class="btn" id="btnB">B</button>
+    <div style="margin-top:10px;">
+      <button class="btn btn-secondary hidden" id="nextBtn">Weiter</button>
+      <button class="btn btn-danger hidden" id="restartBtn">Neu starten</button>
+    </div>
+    <div class="message" id="message"></div>
+  </div>
+  <a class="link-like" onclick="showMenu()">Zurück zum Menü</a>
+</div>
 
-    // Elemente
-    const startMenu = document.getElementById('startMenu');
-    const gameDiv = document.getElementById('game');
-    const infoDiv = document.getElementById('info');
-    const questionEl = document.getElementById('question');
-    const btnA = document.getElementById('btnA');
-    const btnB = document.getElementById('btnB');
-    const nextBtn = document.getElementById('nextBtn');
-    const restartBtn = document.getElementById('restartBtn');
-    const messageEl = document.getElementById('message');
+<div id="info" class="hidden">
+  <h1>Informationen zum Social-Media-Algorithmus</h1>
+  <div class="panel">
+    <p>Soziale Medien zeigen dir meist Inhalte, die zu deinen bisherigen Interessen passen. Dadurch entsteht eine Filterblase.</p>
+    <p><strong>Was du gegen den Social-Media-Algorithmus tun kannst:</strong></p>
+    <ul>
+      <li>1. Suche aktiv nach neuen Perspektiven: Folge auch andere Standpunkte.</li>
+      <li>2. Interagiere mit verschiedenen Themen: Like Beiträge außerhalb deiner Gewohnheiten.</li>
+      <li>3. Wechsle regelmäßig deine Informationsquellen: Konsumiere verschiedene Medien.</li>
+      <li>4. Reduziere algorithmische Verstärkung: Nutze chronologische Feeds und Newsletter.</li>
+      <li>5. Mache digitale Pausen und kontrollierte Nutzung: Setze Zeitlimits und überprüfe Inhalte bewusst.</li>
+    </ul>
+  </div>
+  <a class="link-like" onclick="showMenu()">Zurück zum Menü</a>
+</div>
 
-    let shuffledQuestions = [];
-    let current = 0;
+<script>
+const questions = [
+  { text: "Ein Algorithmus zeigt dir hauptsächlich Inhalte, die du oft likest oder kommentierst. Was ist das Ziel?",
+    options: { A: "Dir möglichst viele verschiedene Meinungen zeigen", B: "Dir Inhalte zeigen, die dich am meisten interessieren" },
+    answer: "B",
+    explanation: "Algorithmen zeigen vorrangig Inhalte, die deine Aufmerksamkeit halten."},
+  { text: "Warum landen manche Posts nicht in deinem Feed, obwohl Freunde sie geteilt haben?",
+    options: { A: "Der Algorithmus entscheidet, welche Inhalte relevant sind", B: "Dein Internet ist zu langsam" },
+    answer: "A",
+    explanation: "Plattformen filtern Inhalte nach Relevanzkriterien."},
+  { text: "Wenn du lange ein Video anschaust, wird der Algorithmus:",
+    options: { A: "Dir ähnliche Videos vorschlagen", B: "Dir keine Videos mehr zeigen" },
+    answer: "A",
+    explanation: "Lange Wiedergabedauer signalisiert Interesse."},
+  { text: "Filterblasen entstehen, weil der Algorithmus:",
+    options: { A: "Nur Inhalte zeigt, die du magst oder die dich bestätigen", B: "Dir zufällige Inhalte aus aller Welt zeigt" },
+    answer: "A",
+    explanation: "Algorithmen bevorzugen bestätigende Inhalte."},
+  { text: "Wie kannst du verhindern, dass der Algorithmus dich in einer Filterblase hält?",
+    options: { A: "Unterschiedliche Inhalte aktiv suchen und liken", B: "Nur die Inhalte liken, die du sowieso magst" },
+    answer: "A",
+    explanation: "Vielfältige Interaktionen sorgen für abwechslungsreichere Inhalte."},
+  { text: "Warum kann ein Social-Media-Algorithmus gefährlich sein?",
+    options: { A: "Er kann dich in einer Filterblase halten und deine Sicht auf die Welt verzerren", B: "Er löscht automatisch alle Nachrichten" },
+    answer: "A",
+    explanation: "Filterblasen können zu eingeschränktem Blick und Polarisierung führen."}
+];
 
-    // Fisher-Yates shuffle
-    function shuffleArray(arr){
-      const a = arr.slice();
-      for(let i=a.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
+let current = 0;
+let shuffledQuestions = [];
 
-    // Navigation
-    function showMenu(){
-      startMenu.classList.remove('hidden');
-      gameDiv.classList.add('hidden');
-      infoDiv.classList.add('hidden');
-      clearMessages();
-    }
-    function showInfo(){
-      startMenu.classList.add('hidden');
-      gameDiv.classList.add('hidden');
-      infoDiv.classList.remove('hidden');
-      clearMessages();
-    }
-    function showGame(){
-      startMenu.classList.add('hidden');
-      infoDiv.classList.add('hidden');
-      gameDiv.classList.remove('hidden');
-      startGame();
-    }
+const startMenu = document.getElementById("startMenu");
+const gameDiv = document.getElementById("game");
+const infoDiv = document.getElementById("info");
+const questionEl = document.getElementById("question");
+const btnA = document.getElementById("btnA");
+const btnB = document.getElementById("btnB");
+const nextBtn = document.getElementById("nextBtn");
+const restartBtn = document.getElementById("restartBtn");
+const messageEl = document.getElementById("message");
 
-    // Start / Fragen laden
-    function startGame(){
-      shuffledQuestions = shuffleArray(questions);
-      current = 0;
-      loadQuestion();
-    }
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
 
-    function loadQuestion(){
-      const q = shuffledQuestions[current];
-      questionEl.textContent = `Frage ${current+1} von ${shuffledQuestions.length}: ${q.text}`;
-      btnA.textContent = "A: " + q.options.A;
-      btnB.textContent = "B: " + q.options.B;
-      messageEl.textContent = "";
-      btnA.style.display = 'inline-block';
-      btnB.style.display = 'inline-block';
-      nextBtn.classList.add('hidden');
-      restartBtn.classList.add('hidden');
-    }
+function showMenu(){
+  startMenu.classList.remove("hidden");
+  gameDiv.classList.add("hidden");
+  infoDiv.classList.add("hidden");
+  clearMessages();
+}
 
-    function clearMessages(){
-      messageEl.textContent = '';
-      nextBtn.classList.add('hidden');
-      restartBtn.classList.add('hidden');
-    }
+function showInfo(){
+  startMenu.classList.add("hidden");
+  gameDiv.classList.add("hidden");
+  infoDiv.classList.remove("hidden");
+  clearMessages();
+}
 
-    // Antwort prüfen
-    function checkAnswer(choice){
-      const q = shuffledQuestions[current];
-      btnA.style.display = 'none';
-      btnB.style.display = 'none';
-      if(choice === q.answer){
-        messageEl.textContent = "Richtig. " + q.explanation;
-        nextBtn.classList.remove('hidden');
-      } else {
-        questionEl.textContent = "Die Filterblase hat dich besiegt.";
-        messageEl.textContent = "Falsch. " + q.explanation;
-        restartBtn.classList.remove('hidden');
-      }
-    }
+function showGame(){
+  startMenu.classList.add("hidden");
+  infoDiv.classList.add("hidden");
+  gameDiv.classList.remove("hidden");
+  startGame();
+}
 
-    nextBtn.addEventListener('click', ()=>{
-      current++;
-      if(current >= shuffledQuestions.length){
-        questionEl.textContent = "Du hast die Filterblase besiegt.";
-        messageEl.textContent = "";
-        nextBtn.classList.add('hidden');
-        restartBtn.classList.remove('hidden');
-      } else {
-        loadQuestion();
-      }
-    });
+function startGame(){
+  shuffledQuestions = shuffleArray(questions);
+  current = 0;
+  loadQuestion();
+}
 
-    restartBtn.addEventListener('click', startGame);
-    btnA.addEventListener('click', ()=> checkAnswer('A'));
-    btnB.addEventListener('click', ()=> checkAnswer('B'));
+function loadQuestion(){
+  const q = shuffledQuestions[current];
+  questionEl.textContent = `Frage ${current+1} von ${shuffledQuestions.length}: ${q.text}`;
+  btnA.textContent = "A: " + q.options.A;
+  btnB.textContent = "B: " + q.options.B;
+  messageEl.textContent = "";
+  btnA.style.display="inline-block";
+  btnB.style.display="inline-block";
+  nextBtn.classList.add("hidden");
+  restartBtn.classList.add("hidden");
+}
 
-    // Beim ersten Laden Menü zeigen
-    showMenu();
-  </script>
+function clearMessages(){
+  messageEl.textContent="";
+  nextBtn.classList.add("hidden");
+  restartBtn.classList.add("hidden");
+}
+
+function checkAnswer(choice){
+  const q = shuffledQuestions[current];
+  btnA.style.display="none";
+  btnB.style.display="none";
+  if(choice===q.answer){
+    messageEl.textContent="Richtig. " + q.explanation;
+    nextBtn.classList.remove("hidden");
+  } else{
+    questionEl.textContent="Die Filterblase hat dich besiegt.";
+    messageEl.textContent="Falsch. " + q.explanation;
+    restartBtn.classList.remove("hidden");
+  }
+}
+
+nextBtn.addEventListener("click", ()=>{
+  current++;
+  if(current>=shuffledQuestions.length){
+    questionEl.textContent="Du hast die Filterblase besiegt.";
+    messageEl.textContent="";
+    nextBtn.classList.add("hidden");
+    restartBtn.classList.remove("hidden");
+  } else{
+    loadQuestion();
+  }
+});
+
+restartBtn.addEventListener("click", startGame);
+btnA.addEventListener("click", ()=>checkAnswer("A"));
+btnB.addEventListener("click", ()=>checkAnswer("B"));
+
+showMenu();
+</script>
 </body>
 </html>
