@@ -49,10 +49,14 @@ a.link-like {
   cursor: pointer;
 }
 ul { text-align: left; padding-left: 20px; }
+
+/* Info Menü größer & Abstand */
 #info .panel p, #info .panel ul li {
   font-size: 1.25rem;
   margin-bottom: 15px;
 }
+
+/* Admin Button & Panel */
 #adminBtn {
   position: fixed;
   bottom: 20px;
@@ -140,7 +144,6 @@ const btn1 = document.getElementById("btn1");
 const btn2 = document.getElementById("btn2");
 const nextBtn = document.getElementById("nextBtn");
 const restartBtn = document.getElementById("restartBtn");
-const messageEl = document.getElementById("message");
 
 // Admin
 const adminBtn = document.getElementById("adminBtn");
@@ -170,10 +173,9 @@ function showInfo(){ startMenu.classList.add("hidden"); gameDiv.classList.add("h
 function shuffleArray(arr){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
 // --- Spiel starten ---
-function showGame(){
+async function showGame(){
   startMenu.classList.add("hidden");
   infoDiv.classList.add("hidden");
-
   if(!isAdmin){
     const savedClass = localStorage.getItem("playerClass");
     if(!savedClass){
@@ -189,7 +191,6 @@ function showGame(){
       localStorage.setItem("playerClass", cls);
     }
   }
-
   gameDiv.classList.remove("hidden");
   startGame();
 }
@@ -232,15 +233,7 @@ function checkAnswer(choice){
 btn1.onclick=()=>checkAnswer(btn1.dataset.answer);
 btn2.onclick=()=>checkAnswer(btn2.dataset.answer);
 
-nextBtn.onclick=()=>{ 
-  current++; 
-  if(current>=shuffledQuestions.length){ 
-    questionEl.textContent="🎉 Du hast die Filterblase besiegt."; 
-    messageEl.textContent=""; 
-    btn1.style.display="none"; btn2.style.display="none"; 
-    nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); 
-  } else loadQuestion(); 
-};
+nextBtn.onclick=()=>{ current++; if(current>=shuffledQuestions.length){ questionEl.textContent="🎉 Du hast die Filterblase besiegt."; messageEl.textContent=""; btn1.style.display="none"; btn2.style.display="none"; nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); } else loadQuestion(); };
 restartBtn.onclick=startGame;
 
 // --- Admin Login/Logout ---
@@ -281,7 +274,7 @@ function showAdminStats(){
   document.getElementById("backBtn").onclick=()=>{
     adminPanel.style.display="none";
     showMenu();
-  }
+  };
 }
 
 function logoutAdmin(){
