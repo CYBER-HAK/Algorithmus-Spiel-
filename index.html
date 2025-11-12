@@ -67,25 +67,22 @@ ul { text-align: left; padding-left: 20px; }
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
+  z-index: 1000;
 }
 #adminPanel {
   position: fixed;
-  bottom: 60px;
-  right: 20px;
-  background-color: #222;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color: rgba(0,0,0,0.95);
   color: #fff;
   padding: 20px;
-  border-radius: 10px;
   display: none;
-  max-width: 300px;
-  max-height: 400px;
   overflow-y: auto;
   z-index: 999;
 }
-
-@media (max-width: 500px) {
-  .btn { width: 100%; margin: 10px 0; }
-}
+#adminPanel h3 { margin-top:0; }
 </style>
 </head>
 <body>
@@ -138,6 +135,7 @@ ul { text-align: left; padding-left: 20px; }
 </div>
 
 <script>
+// --- Spiel-Setup ---
 const startMenu = document.getElementById("startMenu");
 const gameDiv = document.getElementById("game");
 const infoDiv = document.getElementById("info");
@@ -146,16 +144,14 @@ const btn1 = document.getElementById("btn1");
 const btn2 = document.getElementById("btn2");
 const nextBtn = document.getElementById("nextBtn");
 const restartBtn = document.getElementById("restartBtn");
-const messageEl = document.getElementById("message");
 
 // Admin
 const adminBtn = document.getElementById("adminBtn");
 const adminPanel = document.getElementById("adminPanel");
 const adminContent = document.getElementById("adminContent");
-let classData = JSON.parse(localStorage.getItem("classData")) || {};
 let isAdmin = false;
 
-// 9 Fragen
+// --- Fragen ---
 const questions = [
   {text:"Ein Algorithmus zeigt Inhalte, die du oft likst oder kommentierst. Ziel?", options:{A:"Viele verschiedene Meinungen",B:"Inhalte die dich interessieren"},answer:"B",explanation:"Algorithmen zeigen vor allem Inhalte, die deine Aufmerksamkeit halten."},
   {text:"Warum erscheinen manche Posts nicht im Feed, obwohl Freunde sie teilen?", options:{A:"Algorithmus filtert relevante Inhalte",B:"Internet zu langsam"},answer:"A",explanation:"Plattformen filtern Inhalte nach Relevanz."},
@@ -171,25 +167,24 @@ const questions = [
 let shuffledQuestions = [];
 let current = 0;
 
-// Menu / Info
+// --- Funktionen ---
 function showMenu(){ startMenu.classList.remove("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.add("hidden"); clearMessages(); }
 function showInfo(){ startMenu.classList.add("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.remove("hidden"); clearMessages(); }
-
-// Shuffle
 function shuffleArray(arr){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
-// Spiel starten
-function showGame(){
+// --- Spiel starten ---
+async function showGame(){
   startMenu.classList.add("hidden");
   infoDiv.classList.add("hidden");
   if(!isAdmin){
     const savedClass = localStorage.getItem("playerClass");
     if(!savedClass){
-      let cls = prompt("Bitte gib deine Klasse ein (einmalig pro Gerät):");
-      if(cls){
+      let cls = prompt("Bitte gib deine Klasse ein (max. 4 Zeichen):");
+      if(cls && cls.length <=4){
+        let data = JSON.parse(localStorage.getItem("classData")||"{}");
+        data[cls] = (data[cls]||0)+1;
+        localStorage.setItem("classData", JSON.stringify(data));
         localStorage.setItem("playerClass", cls);
-        classData[cls] = (classData[cls]||0)+1;
-        localStorage.setItem("classData", JSON.stringify(classData));
       }
     }
   }
@@ -199,23 +194,22 @@ function showGame(){
 
 function startGame(){
   shuffledQuestions = shuffleArray(questions);
-  current = 0;
+  current=0;
   loadQuestion();
 }
 
 function loadQuestion(){
   const q = shuffledQuestions[current];
-  questionEl.textContent = `Frage ${current+1} von ${shuffledQuestions.length}: ${q.text}`;
+  questionEl.textContent=`Frage ${current+1} von ${shuffledQuestions.length}: ${q.text}`;
   const keys = Object.keys(q.options);
-  btn1.textContent = keys[0]+": "+q.options[keys[0]];
-  btn2.textContent = keys[1]+": "+q.options[keys[1]];
-  btn1.dataset.answer = keys[0];
-  btn2.dataset.answer = keys[1];
-  messageEl.textContent = "";
+  btn1.textContent=keys[0]+": "+q.options[keys[0]];
+  btn2.textContent=keys[1]+": "+q.options[keys[1]];
+  btn1.dataset.answer=keys[0];
+  btn2.dataset.answer=keys[1];
+  messageEl.textContent="";
   btn1.style.display="inline-block"; btn2.style.display="inline-block";
   btn1.disabled=false; btn2.disabled=false;
-  nextBtn.classList.add("hidden");
-  restartBtn.classList.add("hidden");
+  nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden");
 }
 
 function clearMessages(){ messageEl.textContent=""; nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden"); }
@@ -235,20 +229,13 @@ function checkAnswer(choice){
 
 btn1.onclick=()=>checkAnswer(btn1.dataset.answer);
 btn2.onclick=()=>checkAnswer(btn2.dataset.answer);
-nextBtn.onclick=()=>{
-  current++;
-  if(current>=shuffledQuestions.length){
-    questionEl.textContent="🎉 Du hast die Filterblase besiegt.";
-    messageEl.textContent="";
-    btn1.style.display="none"; btn2.style.display="none";
-    nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden");
-  } else { loadQuestion(); }
-};
+
+nextBtn.onclick=()=>{ current++; if(current>=shuffledQuestions.length){ questionEl.textContent="🎉 Du hast die Filterblase besiegt."; messageEl.textContent=""; btn1.style.display="none"; btn2.style.display="none"; nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); } else loadQuestion(); };
 restartBtn.onclick=startGame;
 
-// Admin Login/Logout
+// --- Admin Login/Logout ---
 adminBtn.onclick = ()=>{
-  adminPanel.style.display = adminPanel.style.display==="none"?"block":"none";
+  adminPanel.style.display = "block";
   if(!isAdmin) showAdminLogin();
   else logoutAdmin();
 };
@@ -266,16 +253,17 @@ function showAdminLogin(){
 
 function showAdminStats(){
   isAdmin=true;
+  let data = JSON.parse(localStorage.getItem("classData")||"{}");
   let html="<h4>Spieler-Statistiken</h4><ul>";
-  for(const cls in classData){ html+=`<li>Klasse ${cls}: ${classData[cls]} Spieler</li>`;}
-  html+="</ul><button id='resetStatsBtn' style='margin-top:10px;'>Statistik zurücksetzen</button>";
-  html+="<button id='logoutAdminBtn' style='margin-top:10px;'>Logout</button>";
+  for(const cls in data){ html+=`<li>Klasse ${cls}: ${data[cls]} Spieler</li>`;}
+  html+="</ul>";
+  html+=`<button id='resetStatsBtn' style='margin-top:10px;'>Statistik zurücksetzen</button>`;
+  html+=`<button id='logoutAdminBtn' style='margin-top:10px;'>Logout</button>`;
   adminContent.innerHTML=html;
 
   document.getElementById("resetStatsBtn").onclick=()=>{
     if(confirm("Willst du wirklich die Statistik zurücksetzen?")){
-      classData={};
-      localStorage.setItem("classData", JSON.stringify(classData));
+      localStorage.setItem("classData","{}");
       showAdminStats();
     }
   };
