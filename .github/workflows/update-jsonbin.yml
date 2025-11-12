@@ -1,0 +1,20 @@
+name: Update JSONBin
+on:
+  workflow_dispatch:  # Damit du den Workflow manuell starten kannst
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      JSONBIN_KEY: ${{ secrets.JSONBIN_KEY }}
+      BIN_ID: "6914991043b1c97be9a90f2e"
+    steps:
+      - name: Update JSONBin
+        run: |
+          echo '{"message":"Update von GitHub Actions!"}' > data.json
+          curl -X PUT \
+            -H "Content-Type: application/json" \
+            -H "X-Master-Key: $JSONBIN_KEY" \
+            --data @data.json \
+            https://api.jsonbin.io/v3/b/${BIN_ID}
+Add JSONBin update workflow
