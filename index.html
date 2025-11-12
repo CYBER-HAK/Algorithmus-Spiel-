@@ -8,11 +8,12 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background-color: #f0f8ff;
+      background-color: #000;
+      color: #fff;
       padding: 50px;
     }
     h1 {
-      color: #333;
+      color: #00bfff;
     }
     .question {
       font-size: 1.3em;
@@ -26,12 +27,13 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      background-color: #4CAF50;
+      background-color: #007BFF;
       color: white;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.2s;
     }
     .btn:hover {
-      background-color: #45a049;
+      background-color: #3399ff;
+      transform: scale(1.05);
     }
     #restartBtn {
       background-color: #ff4c4c;
@@ -40,15 +42,18 @@
       background-color: #e84343;
     }
     #nextBtn {
-      background-color: #007BFF;
+      background-color: #008CBA;
     }
     #nextBtn:hover {
-      background-color: #0066d6;
+      background-color: #33b5e5;
     }
     .message {
       margin-top: 20px;
       font-size: 1.2em;
-      color: #333;
+      color: #f0f0f0;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
   </style>
 </head>
