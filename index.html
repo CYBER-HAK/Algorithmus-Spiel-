@@ -130,13 +130,8 @@ ul { text-align: left; padding-left: 20px; }
   <div id="adminContent">Bitte Passwort eingeben:</div>
 </div>
 
-<!-- Stats.js wird eingebunden -->
-<script type="module" src="stats.js"></script>
-
-<script type="module">
+<script>
 // --- Spiel-Setup ---
-import { updateStats } from './stats.js';
-
 const startMenu = document.getElementById("startMenu");
 const gameDiv = document.getElementById("game");
 const infoDiv = document.getElementById("info");
@@ -175,12 +170,12 @@ function showInfo(){ startMenu.classList.add("hidden"); gameDiv.classList.add("h
 function shuffleArray(arr){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
 // --- Spiel starten ---
-async function showGame(){
+function showGame(){
   startMenu.classList.add("hidden");
   infoDiv.classList.add("hidden");
 
   if(!isAdmin){
-    let savedClass = localStorage.getItem("playerClass");
+    const savedClass = localStorage.getItem("playerClass");
     if(!savedClass){
       let cls = prompt("Bitte gib deine Klasse ein (max. 4 Zeichen):");
       if(!cls || cls.length>4){ 
@@ -188,12 +183,10 @@ async function showGame(){
         showMenu(); 
         return; 
       }
-      // Hier updateStats aufrufen
-      await updateStats(cls);
+      let data = JSON.parse(localStorage.getItem("classData")||"{}");
+      data[cls] = (data[cls]||0)+1;
+      localStorage.setItem("classData", JSON.stringify(data));
       localStorage.setItem("playerClass", cls);
-    } else {
-      // Spieler hat schon Klasse gewählt, kann Statistik aktualisieren
-      await updateStats(savedClass);
     }
   }
 
