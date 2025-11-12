@@ -1,13 +1,13 @@
 name: Update JSONBin
 on:
-  workflow_dispatch:  # Damit du den Workflow manuell starten kannst
+  workflow_dispatch: # manuell startbar
 
 jobs:
   update:
     runs-on: ubuntu-latest
     env:
       JSONBIN_KEY: ${{ secrets.JSONBIN_KEY }}
-      BIN_ID: "6914991043b1c97be9a90f2e"
+      BIN_ID: "DEINE_BIN_ID_HIER" # <-- hier deine Bin-ID eintragen
     steps:
       - name: Update JSONBin
         run: |
@@ -17,4 +17,3 @@ jobs:
             -H "X-Master-Key: $JSONBIN_KEY" \
             --data @data.json \
             https://api.jsonbin.io/v3/b/${BIN_ID}
-Add JSONBin workflow
