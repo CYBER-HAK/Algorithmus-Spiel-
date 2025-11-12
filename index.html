@@ -11,6 +11,7 @@
       background-color: #000;
       color: #fff;
       padding: 50px;
+      overflow-x: hidden;
     }
     h1 {
       color: #00bfff;
@@ -63,6 +64,8 @@
       padding: 30px;
       border-radius: 10px;
       line-height: 1.6;
+      box-shadow: 0 0 15px #00bfff;
+      animation: fadeIn 1s ease;
     }
     ul {
       text-align: left;
@@ -72,11 +75,53 @@
       text-decoration: underline;
       cursor: pointer;
     }
+
+    /* Animationen */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bubbleExpand {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes bubbleBurst {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+
+    @keyframes bubbleTakeover {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(3); opacity: 0.9; }
+    }
+
+    .bubble {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(0,191,255,0.3) 0%, rgba(0,191,255,0.1) 70%, transparent 100%);
+      border-radius: 50%;
+      width: 300px;
+      height: 300px;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .bubble.win {
+      animation: bubbleBurst 1s forwards;
+    }
+
+    .bubble.lose {
+      animation: bubbleTakeover 1.5s forwards;
+      background: radial-gradient(circle, rgba(0,0,50,0.8) 0%, rgba(0,0,0,1) 80%);
+    }
   </style>
 </head>
 <body>
 
-  <!-- Startmenü -->
   <div id="startMenu">
     <h1>Besiege die Filterblase</h1>
     <p>Willst du dein Wissen über Social-Media-Algorithmen testen oder erfahren, wie du dich vor ihnen schützen kannst?</p>
@@ -84,7 +129,6 @@
     <button class="btn" onclick="showInfo()">Informationen</button>
   </div>
 
-  <!-- Spielbereich -->
   <div id="game" class="hidden">
     <h1>Besiege die Filterblase</h1>
     <div class="question" id="question">Lade Frage...</div>
@@ -97,7 +141,6 @@
     <a onclick="showMenu()">Zurück zum Menü</a>
   </div>
 
-  <!-- Infobereich -->
   <div id="info" class="hidden">
     <h1>Informationen zum Social-Media-Algorithmus</h1>
     <div class="info">
@@ -108,8 +151,8 @@
         <li><strong>1. Suche aktiv nach neuen Perspektiven:</strong> Folge auch Menschen oder Seiten, die andere Meinungen vertreten.</li>
         <li><strong>2. Interagiere mit verschiedenen Themen:</strong> Like und kommentiere Beiträge, die außerhalb deiner gewohnten Interessen liegen.</li>
         <li><strong>3. Wechsle regelmäßig deine Informationsquellen:</strong> Lies Nachrichten aus verschiedenen Medien und Plattformen.</li>
-        <li><strong>4. Sprich mit anderen über ihre Sichtweisen:</strong> Direkte Gespräche helfen, andere Perspektiven zu verstehen.</li>
-        <li><strong>5. Überprüfe deine Einstellungen:</strong> Viele Plattformen erlauben dir, den Algorithmus zu beeinflussen oder auf einen chronologischen Feed umzuschalten.</li>
+        <li><strong>4. Achte auf deine Verweildauer:</strong> Wenn du dich zu lange mit nur einem Thema beschäftigst, signalisiert das dem Algorithmus, dir mehr davon zu zeigen.</li>
+        <li><strong>5. Nutze Plattformen bewusst:</strong> Mach regelmäßig Pausen, überprüfe, welche Inhalte dich wirklich weiterbringen, und reduziere algorithmisch sortierte Feeds.</li>
       </ul>
 
       <p>So bleibst du offen, informiert und unabhängig vom Social-Media-Algorithmus.</p>
@@ -118,62 +161,16 @@
     <a onclick="showMenu()">Zurück zum Menü</a>
   </div>
 
+  <div class="bubble" id="bubble"></div>
+
   <script>
     const questions = [
-      { 
-        text: "Ein Algorithmus zeigt dir hauptsächlich Inhalte, die du oft likest oder kommentierst. Was ist das Ziel?", 
-        options: { A: "Dir möglichst viele verschiedene Meinungen zeigen", B: "Dir Inhalte zeigen, die dich am meisten interessieren" }, 
-        answer: "B",
-        explanation: "Algorithmen wollen, dass du möglichst lange auf der Plattform bleibst – deshalb zeigen sie dir Inhalte, die dich interessieren oder bestätigen."
-      },
-      { 
-        text: "Warum landen manche Posts nicht in deinem Feed, obwohl Freunde sie geteilt haben?", 
-        options: { A: "Der Algorithmus entscheidet, welche Inhalte relevant sind", B: "Dein Internet ist zu langsam" }, 
-        answer: "A",
-        explanation: "Nicht alle Beiträge werden angezeigt – der Algorithmus filtert vor, um dir nur das zu zeigen, was er für relevant hält."
-      },
-      { 
-        text: "Wenn du lange ein Video anschaust, wird der Algorithmus:", 
-        options: { A: "Dir ähnliche Videos vorschlagen", B: "Dir keine Videos mehr zeigen" }, 
-        answer: "A",
-        explanation: "Lange Watchtime signalisiert Interesse. Der Algorithmus schlägt dir deshalb ähnliche Inhalte vor."
-      },
-      { 
-        text: "Filterblasen entstehen, weil der Algorithmus:", 
-        options: { A: "Nur Inhalte zeigt, die du magst oder die dich bestätigen", B: "Dir zufällige Inhalte aus aller Welt zeigt" }, 
-        answer: "A",
-        explanation: "Wenn du immer ähnliche Inhalte siehst, bekommst du kaum noch andere Meinungen zu Gesicht – das nennt man Filterblase."
-      },
-      { 
-        text: "Du siehst nur Posts von einigen Freundinnen und Freunden. Das liegt daran, dass der Algorithmus:", 
-        options: { A: "Posts nach Relevanz und Interaktion sortiert", B: "Alle Posts gleichzeitig anzeigen will" }, 
-        answer: "A",
-        explanation: "Der Algorithmus zeigt dir vor allem Posts von Personen, mit denen du oft interagierst."
-      },
-      { 
-        text: "Wie kannst du verhindern, dass der Algorithmus dich in einer Filterblase hält?", 
-        options: { A: "Unterschiedliche Inhalte aktiv suchen und liken", B: "Nur die Inhalte liken, die du sowieso magst" }, 
-        answer: "A",
-        explanation: "Wenn du auch andere Themen und Perspektiven likest, lernst du Neues – und der Algorithmus zeigt dir vielfältigere Inhalte."
-      },
-      { 
-        text: "Der Algorithmus zeigt dir Werbung basierend auf:", 
-        options: { A: "Deinen Interessen und Interaktionen", B: "Zufälligen Produkten" }, 
-        answer: "A",
-        explanation: "Je nachdem, was du dir anschaust oder likest, werden dir passende Werbeanzeigen gezeigt."
-      },
-      { 
-        text: "Du willst, dass der Algorithmus dir neue Perspektiven zeigt. Was machst du?", 
-        options: { A: "Nur die Inhalte konsumieren, die du sowieso magst", B: "Aktiv Inhalte von anderen Meinungen folgen und entdecken" }, 
-        answer: "B",
-        explanation: "Wenn du bewusst nach anderen Meinungen suchst, trainierst du den Algorithmus, dir mehr Vielfalt zu zeigen."
-      },
-      { 
-        text: "Warum kann ein Social-Media-Algorithmus gefährlich sein?", 
-        options: { A: "Er kann dich in einer Filterblase halten und deine Sicht auf die Welt verzerren", B: "Er löscht automatisch alle Nachrichten" }, 
-        answer: "A",
-        explanation: "Filterblasen können dazu führen, dass du glaubst, deine Sicht sei die einzige richtige – das erschwert offenen Diskurs."
-      }
+      { text: "Ein Algorithmus zeigt dir hauptsächlich Inhalte, die du oft likest oder kommentierst. Was ist das Ziel?", options: { A: "Dir möglichst viele verschiedene Meinungen zeigen", B: "Dir Inhalte zeigen, die dich am meisten interessieren" }, answer: "B", explanation: "Algorithmen wollen, dass du möglichst lange auf der Plattform bleibst – deshalb zeigen sie dir Inhalte, die dich interessieren oder bestätigen." },
+      { text: "Warum landen manche Posts nicht in deinem Feed, obwohl Freunde sie geteilt haben?", options: { A: "Der Algorithmus entscheidet, welche Inhalte relevant sind", B: "Dein Internet ist zu langsam" }, answer: "A", explanation: "Der Algorithmus filtert Inhalte, um dir nur das zu zeigen, was er für relevant hält." },
+      { text: "Wenn du lange ein Video anschaust, wird der Algorithmus:", options: { A: "Dir ähnliche Videos vorschlagen", B: "Dir keine Videos mehr zeigen" }, answer: "A", explanation: "Lange Watchtime signalisiert Interesse. Deshalb bekommst du ähnliche Inhalte vorgeschlagen." },
+      { text: "Filterblasen entstehen, weil der Algorithmus:", options: { A: "Nur Inhalte zeigt, die du magst oder die dich bestätigen", B: "Dir zufällige Inhalte aus aller Welt zeigt" }, answer: "A", explanation: "Wenn du immer nur bestätigende Inhalte siehst, wirst du von anderen Sichtweisen abgeschirmt." },
+      { text: "Wie kannst du verhindern, dass der Algorithmus dich in einer Filterblase hält?", options: { A: "Unterschiedliche Inhalte aktiv suchen und liken", B: "Nur die Inhalte liken, die du sowieso magst" }, answer: "A", explanation: "Durch vielfältige Interaktion trainierst du den Algorithmus auf mehr Abwechslung." },
+      { text: "Warum kann ein Social-Media-Algorithmus gefährlich sein?", options: { A: "Er kann dich in einer Filterblase halten und deine Sicht auf die Welt verzerren", B: "Er löscht automatisch alle Nachrichten" }, answer: "A", explanation: "Filterblasen können den Blick auf die Realität einschränken und Polarisierung fördern." }
     ];
 
     let current = 0;
@@ -188,6 +185,7 @@
     const nextBtn = document.getElementById("nextBtn");
     const restartBtn = document.getElementById("restartBtn");
     const messageEl = document.getElementById("message");
+    const bubble = document.getElementById("bubble");
 
     function shuffleArray(array) {
       let shuffled = array.slice();
@@ -235,6 +233,14 @@
       restartBtn.style.display = "none";
     }
 
+    function triggerAnimation(type) {
+      bubble.classList.remove("win", "lose");
+      bubble.style.opacity = "1";
+      if (type === "win") bubble.classList.add("win");
+      else if (type === "lose") bubble.classList.add("lose");
+      setTimeout(() => { bubble.style.opacity = "0"; }, 1500);
+    }
+
     function checkAnswer(choice) {
       const q = shuffledQuestions[current];
       const correct = q.answer;
@@ -248,16 +254,18 @@
         questionEl.textContent = "Die Filterblase hat dich besiegt.";
         messageEl.innerHTML = "Falsch. " + q.explanation;
         restartBtn.style.display = "inline-block";
+        triggerAnimation("lose");
       }
     }
 
     nextBtn.addEventListener("click", () => {
       current++;
       if (current >= shuffledQuestions.length) {
-        questionEl.textContent = "Herzlichen Glückwunsch! Du hast die Filterblase besiegt.";
+        questionEl.textContent = "Du hast die Filterblase besiegt!";
         messageEl.textContent = "";
         nextBtn.style.display = "none";
         restartBtn.style.display = "inline-block";
+        triggerAnimation("win");
       } else {
         loadQuestion();
       }
