@@ -98,5 +98,10 @@ ul { text-align: left; padding-left: 20px; }
   <a class="link-like" onclick="showMenu()">Zurück zum Menü</a>
 </div>
 
+<script>
+function showMenu(){ document.getElementById('startMenu').classList.remove('hidden'); document.getElementById('game').classList.add('hidden'); document.getElementById('info').classList.add('hidden'); }
+function showInfo(){ document.getElementById('startMenu').classList.add('hidden'); document.getElementById('game').classList.add('hidden'); document.getElementById('info').classList.remove('hidden'); }
+function showGame(){ document.getElementById('startMenu').classList.add('hidden'); document.getElementById('game').classList.remove('hidden'); document.getElementById('info').classList.add('hidden'); }
+</script>
 </body>
 </html>
