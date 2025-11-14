@@ -50,7 +50,6 @@ a.link-like {
 }
 ul { text-align: left; padding-left: 20px; }
 
-/* Info Menü größer & Abstand */
 #info .panel p, #info .panel ul li {
   font-size: 1.25rem;
   margin-bottom: 15px;
@@ -89,98 +88,15 @@ ul { text-align: left; padding-left: 20px; }
     <p>Soziale Medien zeigen dir meist Inhalte, die zu deinen bisherigen Interessen passen. Dadurch entsteht eine Filterblase.</p>
     <p><strong>Was du gegen den Social-Media-Algorithmus tun kannst:</strong></p>
     <ul>
-      <li>1. Suche aktiv nach neuen Perspektiven: Folge auch andere Standpunkte.</li>
-      <li>2. Interagiere mit verschiedenen Themen: Like Beiträge außerhalb deiner Gewohnheiten.</li>
-      <li>3. Wechsle regelmäßig deine Informationsquellen: Konsumiere verschiedene Medien.</li>
-      <li>4. Reduziere algorithmische Verstärkung: Nutze chronologische Feeds und Newsletter.</li>
-      <li>5. Mache digitale Pausen und kontrollierte Nutzung: Setze Zeitlimits und überprüfe Inhalte bewusst.</li>
+      <li>1. Ändere bewusst dein Interaktionsverhalten, indem du weniger likest, kommentierst und teilst.</li>
+      <li>2. Scrolle Inhalte, die du nicht sehen willst, schnell weiter.</li>
+      <li>3. Räume deine Follow-Liste auf und entfolge Accounts, deren Inhalte du nicht mehr willst.</li>
+      <li>4. Suche gezielt nach Inhalten, die du stattdessen mehr sehen möchtest.</li>
+      <li>5. Lösche regelmäßig deine Such- und Watch-History.</li>
     </ul>
   </div>
   <a class="link-like" onclick="showMenu()">Zurück zum Menü</a>
 </div>
 
-<script>
-// --- Elemente ---
-const startMenu = document.getElementById("startMenu");
-const gameDiv = document.getElementById("game");
-const infoDiv = document.getElementById("info");
-const questionEl = document.getElementById("question");
-const btn1 = document.getElementById("btn1");
-const btn2 = document.getElementById("btn2");
-const nextBtn = document.getElementById("nextBtn");
-const restartBtn = document.getElementById("restartBtn");
-const messageEl = document.getElementById("message");
-
-// --- Fragen ---
-const questions = [
-  {text:"Ein Algorithmus zeigt Inhalte, die du oft likst oder kommentierst. Ziel?", options:{A:"Viele verschiedene Meinungen",B:"Inhalte die dich interessieren"},answer:"B",explanation:"Algorithmen zeigen vor allem Inhalte, die deine Aufmerksamkeit halten."},
-  {text:"Warum erscheinen manche Posts nicht im Feed, obwohl Freunde sie teilen?", options:{A:"Algorithmus filtert relevante Inhalte",B:"Internet zu langsam"},answer:"A",explanation:"Plattformen filtern Inhalte nach Relevanz."},
-  {text:"Wenn du ein Video lange ansiehst, was macht der Algorithmus?", options:{A:"Zeigt ähnliche Videos",B:"Zeigt keine Videos mehr"},answer:"A",explanation:"Lange Wiedergabedauer signalisiert Interesse."},
-  {text:"Filterblasen entstehen, weil der Algorithmus…", options:{A:"Nur bestätigende Inhalte zeigt",B:"Zufällige Inhalte aus aller Welt"},answer:"A",explanation:"Algorithmen bevorzugen bestätigende Inhalte."},
-  {text:"Wie kann man Filterblasen vermeiden?", options:{A:"Vielfältige Inhalte aktiv suchen und liken",B:"Nur Inhalte liken die man mag"},answer:"A",explanation:"Abwechslungsreiche Interaktionen führen zu vielfältigeren Inhalten."},
-  {text:"Warum kann ein Social-Media-Algorithmus gefährlich sein?", options:{A:"Kann Sicht auf Welt verzerren",B:"Löscht automatisch Nachrichten"},answer:"A",explanation:"Filterblasen führen zu eingeschränktem Blick und Polarisierung."},
-  {text:"Was passiert, wenn man nur gleichartige Inhalte konsumiert?", options:{A:"Filterblase verstärkt sich",B:"Algorithmus pausiert"},answer:"A",explanation:"Der Algorithmus verstärkt ähnliche Inhalte."},
-  {text:"Wie erkennt ein Algorithmus Interesse?", options:{A:"Lange Verweildauer bei Inhalt",B:"Zufällige Likes"},answer:"A",explanation:"Lange Verweildauer signalisiert Interesse."},
-  {text:"Warum ist es wichtig, andere Perspektiven zu folgen?", options:{A:"Reduziert Filterblasen",B:"Algorithmus blendet Inhalte aus"},answer:"A",explanation:"Andere Perspektiven verhindern einseitige Ansichten."}
-];
-
-let shuffledQuestions = [];
-let current = 0;
-
-// --- Funktionen ---
-function showMenu(){ startMenu.classList.remove("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.add("hidden"); clearMessages(); }
-function showInfo(){ startMenu.classList.add("hidden"); gameDiv.classList.add("hidden"); infoDiv.classList.remove("hidden"); clearMessages(); }
-function shuffleArray(arr){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-function clearMessages(){ messageEl.textContent=""; nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden"); }
-
-// --- Spiel starten ---
-function showGame(){
-  startMenu.classList.add("hidden");
-  infoDiv.classList.add("hidden");
-  gameDiv.classList.remove("hidden");
-  startGame();
-}
-
-function startGame(){
-  shuffledQuestions = shuffleArray(questions);
-  current=0;
-  loadQuestion();
-}
-
-function loadQuestion(){
-  const q = shuffledQuestions[current];
-  questionEl.textContent=`Frage ${current+1} von ${shuffledQuestions.length}: ${q.text}`;
-  const keys = Object.keys(q.options);
-  btn1.textContent=keys[0]+": "+q.options[keys[0]];
-  btn2.textContent=keys[1]+": "+q.options[keys[1]];
-  btn1.dataset.answer=keys[0];
-  btn2.dataset.answer=keys[1];
-  messageEl.textContent="";
-  btn1.style.display="inline-block"; btn2.style.display="inline-block";
-  btn1.disabled=false; btn2.disabled=false;
-  nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden");
-}
-
-function checkAnswer(choice){
-  const q = shuffledQuestions[current];
-  btn1.style.display="none"; btn2.style.display="none";
-  if(choice===q.answer){
-    messageEl.textContent="✅ Richtig. "+q.explanation;
-    nextBtn.classList.remove("hidden");
-  } else{
-    questionEl.textContent="❌ Die Filterblase hat dich besiegt.";
-    messageEl.textContent="Falsch. "+q.explanation;
-    restartBtn.classList.remove("hidden");
-  }
-}
-
-btn1.onclick=()=>checkAnswer(btn1.dataset.answer);
-btn2.onclick=()=>checkAnswer(btn2.dataset.answer);
-
-nextBtn.onclick=()=>{ current++; if(current>=shuffledQuestions.length){ questionEl.textContent="🎉 Du hast die Filterblase besiegt."; messageEl.textContent=""; btn1.style.display="none"; btn2.style.display="none"; nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); } else loadQuestion(); };
-restartBtn.onclick=startGame;
-
-showMenu();
-</script>
 </body>
 </html>
