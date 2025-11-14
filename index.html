@@ -98,13 +98,50 @@ function clearMessages(){ messageEl.textContent=""; nextBtn.classList.add("hidde
 // --- Spiel starten ---
 function showGame(){ startMenu.classList.add("hidden"); infoDiv.classList.add("hidden"); gameDiv.classList.remove("hidden"); startGame(); }
 function startGame(){ shuffledQuestions = shuffleArray(questions); current=0; loadQuestion(); }
-function loadQuestion(){ const q = shuffledQuestions[current]; questionEl.textContent=Frage ${current+1} von ${shuffledQuestions.length}: ${q.text}; const keys = Object.keys(q.options); btn1.textContent=keys[0]+": "+q.options[keys[0]]; btn2.textContent=keys[1]+": "+q.options[keys[1]]; btn1.dataset.answer=keys[0]; btn2.dataset.answer=keys[1]; messageEl.textContent=""; btn1.style.display="inline-block"; btn2.style.display="inline-block"; btn1.disabled=false; btn2.disabled=false; nextBtn.classList.add("hidden"); restartBtn.classList.add("hidden"); }
-function checkAnswer(choice){ const q = shuffledQuestions[current]; btn1.style.display="none"; btn2.style.display="none"; if(choice===q.answer){ messageEl.textContent="✅ Richtig. "+q.explanation; nextBtn.classList.remove("hidden"); } else{ questionEl.textContent="❌ Die Filterblase hat dich besiegt."; messageEl.textContent="Falsch. "+q.explanation; restartBtn.classList.remove("hidden"); } }
+function loadQuestion(){ 
+    const q = shuffledQuestions[current]; 
+    questionEl.textContent = `Frage ${current+1} von ${shuffledQuestions.length}: ${q.text}`; 
+    const keys = Object.keys(q.options); 
+    btn1.textContent=keys[0]+": "+q.options[keys[0]]; 
+    btn2.textContent=keys[1]+": "+q.options[keys[1]]; 
+    btn1.dataset.answer=keys[0]; 
+    btn2.dataset.answer=keys[1]; 
+    messageEl.textContent=""; 
+    btn1.style.display="inline-block"; 
+    btn2.style.display="inline-block"; 
+    btn1.disabled=false; 
+    btn2.disabled=false; 
+    nextBtn.classList.add("hidden"); 
+    restartBtn.classList.add("hidden"); 
+}
+function checkAnswer(choice){ 
+    const q = shuffledQuestions[current]; 
+    btn1.style.display="none"; 
+    btn2.style.display="none"; 
+    if(choice===q.answer){ 
+        messageEl.textContent="✅ Richtig. "+q.explanation; 
+        nextBtn.classList.remove("hidden"); 
+    } else{ 
+        questionEl.textContent="❌ Die Filterblase hat dich besiegt."; 
+        messageEl.textContent="Falsch. "+q.explanation; 
+        restartBtn.classList.remove("hidden"); 
+    } 
+}
 
 btn1.onclick=()=>checkAnswer(btn1.dataset.answer);
 btn2.onclick=()=>checkAnswer(btn2.dataset.answer);
 
-nextBtn.onclick=()=>{ current++; if(current>=shuffledQuestions.length){ questionEl.textContent="🎉 Du hast die Filterblase besiegt."; messageEl.textContent=""; btn1.style.display="none"; btn2.style.display="none"; nextBtn.classList.add("hidden"); restartBtn.classList.remove("hidden"); } else loadQuestion(); };
+nextBtn.onclick=()=>{
+    current++; 
+    if(current>=shuffledQuestions.length){ 
+        questionEl.textContent="🎉 Du hast die Filterblase besiegt."; 
+        messageEl.textContent=""; 
+        btn1.style.display="none"; 
+        btn2.style.display="none"; 
+        nextBtn.classList.add("hidden"); 
+        restartBtn.classList.remove("hidden"); 
+    } else loadQuestion(); 
+};
 
 restartBtn.onclick=startGame;
 
